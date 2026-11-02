@@ -1,0 +1,2271 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>LearnAuditor — prezentacja projektu</title>
+  <style>
+/* Aurora Interface — dashboard.html */
+
+:root {
+  --border-width: 2px;
+  --border-coverage: 75%;
+  color-scheme: dark;
+  --bg: #070d19;
+  --page-background: linear-gradient(165deg, #111925, #0b101a 72%);
+  --surface: #0d1728;
+  --surface-raised: #111f34;
+  --surface-soft: rgba(20, 34, 55, .72);
+  --border: #29374a;
+  --border-bright: #3b4b63; --focus-ring: #b6abff;
+  --text: #eff5ff;
+  --muted: #9baec9;
+  --subtle: #6e829f;
+  --accent: #8878ff;
+  --accent-light: #b1a5ff;
+  --cyan: #59dfd8;
+  --success: #6ae9ba;
+  --danger: #ff9dab;
+  --shadow: 0 32px 100px rgba(0, 0, 0, .34);
+  --radius: 17px;
+  --radius-sm: 10px;
+}
+
+/* Use exact fractional borders when they align to device pixels. */
+@media (resolution: 2dppx), (resolution: 4dppx), (resolution: 6dppx), (resolution: 8dppx) {
+  :root { --border-width: 1.5px; --border-coverage: 100%; }
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  font: 400 14px/1.5 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  isolation: isolate;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.48;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: var(--page-background);
+}
+
+.demo, .phone-screen {
+  background: var(--page-background);
+}
+
+::selection {
+  color: white;
+  background: #695cce;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.deck-header, .deck-footer {
+  background: rgba(8, 16, 29, .79);
+  backdrop-filter: blur(18px);
+}
+
+.brand-name {
+  display: block;
+  color: #f8faff;
+  letter-spacing: -.6px;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border: var(--border-width) solid color-mix(in srgb, #6253af var(--border-coverage), transparent);
+  border-radius: 10px;
+  color: #e4ddff;
+  background: #5546a6;
+  box-shadow: none;
+  flex-basis: 32px;
+  font-size: 18px;
+  transition: transform 400ms ease, background-color 400ms ease;
+}
+
+.brand-mark svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  stroke: none;
+  display: block;
+}
+
+.brand:hover .brand-mark {
+  transform: translateY(-1px);
+}
+
+.kicker, .caption {
+  color: #a99bff;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.kicker-rule {
+  width: 16px;
+  height: 1px;
+  background: #8777f8;
+}
+
+.cover, .ending {
+  border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+  border-radius: 17px;
+  background: linear-gradient(155deg, #182333, #111925 72%);
+  box-shadow: 0 16px 50px rgba(0,0,0,.14);
+}
+
+.cover-copy .description, .ending-copy .description {
+  color: #a9bad2;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 40px;
+  padding: 9px 16px;
+  border: var(--border-width) solid transparent;
+  border-radius: 10px;
+  color: white;
+  background: #6353c9;
+  box-shadow: none;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.3;
+  transition: transform 400ms ease, filter 400ms ease, background-color 400ms ease, border-color 400ms ease;
+  white-space: nowrap;
+}
+
+.phone-submit {
+  border: var(--border-width) solid transparent;
+  color: white;
+  background: #6353c9;
+  box-shadow: none;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+  box-shadow: none;
+}
+
+.btn:active:not(:disabled) {
+  transform: none;
+}
+
+.btn-secondary {
+  background: rgba(23, 39, 63, .74);
+  border-color: color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+  box-shadow: none;
+  color: #d3ddec;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  box-shadow: none;
+  background: rgba(33, 51, 78, .9);
+}
+
+.btn-ghost {
+  border: var(--border-width) solid transparent;
+  box-shadow: none;
+  background: transparent;
+  color: #a7b8d2;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(110, 125, 161, .1);
+  box-shadow: none;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  border-radius: 9px;
+  color: #a8b8d2;
+  background: rgba(21, 35, 55, .7);
+  transition: background-color 400ms ease, color 400ms ease, border-color 400ms ease;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 12px;
+  border: var(--border-width) solid transparent;
+  border-radius: 10px;
+  background: none;
+  color: #9aacca;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 650;
+  transition: color 400ms ease, background-color 400ms ease, border-color 400ms ease;
+}
+
+.nav-link:hover:not(:disabled) {
+  color: #eff5ff;
+  background: rgba(141, 132, 237, .09);
+}
+
+#contents-list [aria-current="step"], .demo .demo-steps [aria-current="step"], .architecture-controls [aria-pressed="true"] {
+  color: #ebe5ff;
+  border-color: color-mix(in srgb, rgba(160, 144, 255, .17) var(--border-coverage), transparent);
+  background: linear-gradient(100deg, rgba(130, 113, 240, .2), rgba(95, 102, 205, .08));
+}
+
+.flow-list li {
+  border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  border-radius: 13px;
+  background: linear-gradient(155deg, #162131, #111925 72%);
+}
+
+.flow-number {
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(135,118,250,.12);
+  color: #ad9eff;
+}
+
+.arch-node {
+  border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  border-radius: 14px;
+  background: linear-gradient(155deg, #162131, #111925 72%);
+  transition: border-color 400ms ease, transform 400ms ease, background-color 400ms ease;
+}
+
+.arch-server, .architecture[data-path="ai"] .arch-ai, .architecture[data-path="db"] .arch-db, .architecture[data-path="bridge"] .arch-redis {
+  border-color: color-mix(in srgb, #6c6396 var(--border-coverage), transparent);
+  background: #1b263d;
+  box-shadow: none;
+}
+
+.rubric {
+  border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+  border-radius: 16px;
+  background: linear-gradient(155deg, #162131, #111925 72%);
+  box-shadow: 0 22px 63px rgba(0,0,0,.18);
+}
+
+.review-note, .phone-task-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 22px;
+  padding: 3px 7px;
+  border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  border-radius: 6px;
+  background: rgba(36, 52, 76, .39);
+  color: #9fb1ca;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.review-note {
+  border-color: color-mix(in srgb, rgba(241,194,130,.18) var(--border-coverage), transparent);
+  color: #edc79c;
+  background: rgba(241,194,130,.06);
+}
+
+.phone-task-number {
+  border-color: color-mix(in srgb, rgba(89,223,216,.2) var(--border-coverage), transparent);
+  background: rgba(89,223,216,.07);
+  color: #85deda;
+}
+
+dialog {
+  position: fixed;
+  max-height: min(90vh, 860px);
+  padding: 0;
+  margin: auto;
+  border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+  border-radius: 19px;
+  color: var(--text);
+  background: #101c30;
+  box-shadow: 0 35px 125px rgba(0,0,0,.66);
+  overflow: hidden;
+}
+
+dialog::backdrop {
+  background: rgba(3,8,17,.77);
+  backdrop-filter: blur(8px);
+}
+
+.deck-progress button::after {
+  background: var(--surface-raised);
+}
+
+.deck-progress button[aria-current="step"]::after {
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  border-radius: 20px;
+}
+
+/* Exam feedback and panel animation — exam.html */
+
+.feedback-preview {
+  border: var(--border-width) solid color-mix(in srgb, rgba(87, 217, 205, .22) var(--border-coverage), transparent);
+  border-radius: 16px;
+  color: #c4d7e7;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+@keyframes page-arrive {
+  from { opacity: .65; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Presentation layout. The LearnAuditor theme is in aurora.css. */
+:root {
+  --gutter: clamp(20px, 4vw, 68px);
+  --mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--bg); }
+
+body {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+
+h1, h2, h3, p, figure { margin: 0; }
+[tabindex="-1"]:focus { outline: none; }
+img { display: block; max-width: 100%; }
+
+.deck-header, .deck-footer { z-index: 1; padding-inline: var(--gutter); }
+.deck-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; border-bottom: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); }
+
+.brand { display: inline-flex; align-items: center; gap: 9px; padding: 0; border: 0; background: transparent; }
+
+.header-actions, .cover-actions, .deck-arrows { display: flex; align-items: center; gap: 10px; }
+
+.icon-btn { width: 40px; min-height: 40px; padding: 0; font-size: 19px; }
+
+.stage { min-height: 0; display: flex; flex-direction: column; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--border-bright) transparent; }
+.slide {
+  flex: none;
+  width: min(1420px, calc(100% - 2 * var(--gutter)));
+  margin: auto;
+  padding-block: clamp(28px, 5.4vh, 58px);
+}
+
+.slide.is-active { animation: page-arrive .35s ease both; }
+.slide-heading { margin-bottom: clamp(24px, 4vh, 38px); }
+.compact-heading { margin-bottom: 18px; }
+.slide h2 { font-size: clamp(32px, 4.9vw, 69px); font-weight: 770; letter-spacing: -.06em; line-height: 1.04; }
+.slide-heading h2 + p { margin-top: 15px; }
+.description { max-width: 61ch; color: var(--muted); font-size: clamp(16px, 1.5vw, 20px); line-height: 1.55; }
+
+.kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 17px; }
+
+.cover, .ending {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-inline: clamp(18px, 4vw, 48px);
+}
+.cover { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .75fr); gap: clamp(16px, 3vw, 48px); align-items: center; }
+.cover h1, .ending h2 { font-size: clamp(50px, 6.35vw, 101px); line-height: .98; font-weight: 780; letter-spacing: -.079em; }
+.cover h1 span, .ending h2 span { color: var(--accent-light); }
+.cover-lead { max-width: 26ch; margin: 21px 0 11px; font-size: clamp(23px, 2.35vw, 33px); line-height: 1.18; letter-spacing: -.035em; font-weight: 680; }
+.cover-copy .description { max-width: 40ch; }
+.cover-actions { margin-top: 26px; flex-wrap: wrap; }
+
+.flow-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px; margin: 0; padding: 0; list-style: none; }
+
+.flow-list li { padding: clamp(13px, 2vw, 22px); min-width: 0; }
+
+.flow-number { width: 34px; height: 34px; margin-bottom: 13px; font: 750 12px/1 var(--mono); }
+.flow-list h3, .rubric h3 { margin-bottom: 7px; font-size: clamp(17px, 2vw, 24px); line-height: 1.2; letter-spacing: -.025em; }
+.flow-list p, .feedback-preview > p:last-child { color: var(--muted); font-size: clamp(14px, 1.25vw, 17px); line-height: 1.55; }
+
+.phone-visual { justify-self: center; width: min(100%, 27vh, 248px); min-width: 0; text-align: center; }
+.phone-device { position: relative; isolation: isolate; filter: drop-shadow(0 22px 44px rgba(0, 0, 0, .42)); }
+.phone-bezel { position: relative; z-index: 3; display: block; width: 100%; height: auto; pointer-events: none; }
+.phone-screen {
+  position: absolute;
+  z-index: 2;
+  inset: 1.875% 4.263%;
+  overflow: hidden;
+  border-radius: 15% / 6.82%;
+  container-type: inline-size;
+}
+
+.phone-exam {
+  position: absolute;
+  inset: 6.8% 0 2.8%;
+  display: flex;
+  flex-direction: column;
+  gap: 3cqw;
+  padding-inline: 4.4%;
+  color: var(--text);
+  text-align: left;
+  font-size: 3.8cqw;
+  line-height: 1.42;
+}
+
+.phone-brand { display: flex; align-items: center; gap: 2.5cqw; padding: 1.4cqw 0 2.8cqw; border-bottom: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); font-size: 5.2cqw; font-weight: 800; }
+
+.phone-brand .brand-mark { width: 8cqw; height: 8cqw; flex-basis: 8cqw; border-radius: 2.4cqw; }
+.phone-brand .brand-mark svg { width: 4.5cqw; height: 4.5cqw; }
+.phone-exam-name { font-size: 6.4cqw; font-weight: 730; line-height: 1.15; letter-spacing: -.035em; }
+.phone-exam-heading { display: flex; align-items: center; justify-content: space-between; gap: 2cqw; }
+.phone-clock { padding: .8cqw 1.8cqw; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 2cqw; color: #d6caff; font-size: 3.8cqw; font-variant-numeric: tabular-nums; }
+
+.phone-task, .phone-answer { padding: 3.6cqw; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 3.2cqw; background: var(--surface); }
+
+.phone-screen .phone-task-number { min-height: 0; margin-bottom: 1.7cqw; padding: .9cqw 1.8cqw; border-radius: 8cqw; font-size: 2.9cqw; text-transform: uppercase; letter-spacing: .06em; }
+.phone-task strong, .phone-answer strong { display: block; line-height: 1.25; }
+.phone-task strong { font-size: 4.6cqw; }
+.phone-task p { margin-top: 1.8cqw; color: var(--muted); }
+.phone-answer { display: flex; flex: 1; flex-direction: column; gap: 2cqw; min-height: 0; }
+
+.phone-answer p { flex: 1; padding: 2.8cqw; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 2cqw; background: rgba(7, 16, 30, .75); color: var(--subtle); }
+
+.phone-screen .phone-submit { padding: 2.6cqw; border-radius: 2.2cqw; font-size: 3.5cqw; text-align: center; }
+
+.phone-exam-nav { display: flex; justify-content: space-between; gap: 2cqw; color: var(--muted); font-size: 3.2cqw; }
+
+.phone-exam-nav span:last-child { color: var(--accent-light); }
+.phone-status {
+  position: absolute;
+  inset: 0 8.1% auto;
+  height: 6.3%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #f6f8ff;
+  font-size: 4.1cqw;
+  font-weight: 690;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.phone-status-icons { display: flex; align-items: center; gap: .33em; }
+.phone-signal {
+  width: .96em;
+  height: .64em;
+  background: currentColor;
+  clip-path: polygon(0 100%,0 71%,19% 71%,19% 100%,27% 100%,27% 47%,46% 47%,46% 100%,54% 100%,54% 24%,73% 24%,73% 100%,81% 100%,81% 0,100% 0,100% 100%);
+}
+.phone-wifi { position: relative; width: .86em; height: .57em; overflow: hidden; }
+.phone-wifi::before, .phone-wifi::after { content: ""; position: absolute; left: 50%; width: .92em; height: .82em; border-radius: 50%; border: .11em solid currentColor; transform: translateX(-50%); }
+.phone-wifi::after { top: .19em; width: .56em; height: .57em; }
+.phone-battery { position: relative; width: 1.22em; height: .62em; border: .09em solid currentColor; border-radius: .15em; }
+.phone-battery::before { content: ""; position: absolute; inset: .08em; border-radius: .05em; background: currentColor; }
+.phone-battery::after { content: ""; position: absolute; left: 100%; top: 27%; width: .13em; height: 46%; border-radius: 0 .07em .07em 0; background: currentColor; }
+.phone-home { position: absolute; bottom: .82%; left: 33%; width: 34%; height: .45%; border-radius: 4px; background: #f3f5fbe8; }
+
+.grading-layout { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr); gap: clamp(20px, 4vw, 56px); align-items: stretch; }
+.rubric h3 { font-size: clamp(17px, 1.75vw, 24px); margin-bottom: 13px; }
+.rubric table { width: 100%; border-collapse: collapse; font-size: clamp(14px, 1.3vw, 17px); }
+.rubric tr { border-bottom: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); }
+.rubric th, .rubric td { padding: 11px 0; }
+.rubric th { text-align: left; font-weight: 500; }
+.rubric td { color: var(--accent-light); font-family: var(--mono); text-align: right; white-space: nowrap; padding-left: 12px; }
+
+.rubric, .feedback-preview { padding: clamp(16px, 2.5vw, 28px); min-width: 0; }
+.score-preview { margin: 7px 0 10px; font-size: clamp(46px, 6.2vw, 86px); color: var(--cyan); font-weight: 760; line-height: 1; letter-spacing: -.07em; }
+.score-preview span { font-size: .54em; margin-left: 4px; }
+
+.slide .review-note { display: flex; width: fit-content; align-items: baseline; gap: 9px; max-width: 80ch; margin-top: 20px; padding: 8px 11px; font-size: 13px; line-height: 1.55; }
+
+.review-mark { font-weight: 850; }
+
+.demo-slide { padding-block: clamp(12px, 2.1dvh, 24px); }
+.demo-slide h2 { font-size: clamp(30px, 4vw, 52px); }
+.architecture { display: grid; grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr) 36px minmax(0, 1.3fr); align-items: center; }
+
+.arch-node { min-width: 0; padding: clamp(15px, 2vw, 24px); }
+.arch-node h3 { margin: 5px 0 6px; font-size: clamp(17px, 2vw, 26px); letter-spacing: -.035em; line-height: 1.17; }
+.arch-node p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.arch-sep { display: none; }
+
+.arch-connector { display: block; position: relative; height: 1px; background: var(--border-bright); }
+.arch-connector:first-of-type::after { content: ""; position: absolute; right: 3px; top: -3px; width: 7px; height: 7px; border-top: var(--border-width) solid color-mix(in srgb, var(--muted) var(--border-coverage), transparent); border-right: var(--border-width) solid color-mix(in srgb, var(--muted) var(--border-coverage), transparent); transform: rotate(45deg); }
+.arch-services { display: grid; gap: 9px; position: relative; padding-left: 14px; }
+.arch-services .arch-node { position: relative; padding: clamp(11px, 1.4vw, 16px) clamp(14px, 1.8vw, 20px); }
+.arch-services .arch-node::before { content: ""; position: absolute; left: -15px; width: 14px; top: 50%; border-top: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent); transition: border-color 300ms ease; }
+.architecture[data-path="ai"] .arch-ai::before, .architecture[data-path="db"] .arch-db::before, .architecture[data-path="bridge"] .arch-redis::before { border-top-color: var(--accent); }
+.arch-services .arch-node::after { content: ""; position: absolute; left: -15px; top: 0; bottom: -10px; border-left: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent); }
+.arch-services .arch-node:first-child::after { top: 50%; }
+.arch-services .arch-node:last-child::after { bottom: 50%; }
+.architecture-detail { margin-top: 19px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px 19px; align-items: center; }
+.architecture-controls { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.architecture-detail p { color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+.ending { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .52fr); align-items: center; gap: 24px; }
+.ending h2 + p { margin-top: 17px; }
+
+.ending-mark { justify-self: center; width: min(100%, 220px); color: var(--accent-light); }
+.ending-mark svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 7px 30px rgba(116, 100, 238, .32)); }
+
+.deck-footer { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(170px, 340px) minmax(125px, 1fr); align-items: center; gap: 18px; min-height: 70px; border-top: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); }
+.deck-position { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.deck-counter { flex: 0 0 auto; font: 650 13px/1 var(--mono); color: var(--accent-light); }
+.deck-chapter { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.deck-arrows { justify-self: end; gap: 7px; }
+.deck-arrows .next { min-width: 78px; }
+.deck-progress { display: flex; gap: 5px; align-items: center; }
+.deck-progress button { position: relative; min-width: 0; flex: 1; height: 40px; border: 0; padding: 0; background: none; }
+
+.deck-progress button::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - 3px); height: 6px; border-radius: 20px; transition: filter 400ms ease; }
+
+.deck-progress button.visited::after { background: rgba(136, 120, 255, .35); }
+.deck-progress button:hover::after { filter: brightness(1.35); }
+
+#contents { width: min(470px, calc(100% - 24px)); max-height: min(90dvh, 860px); overflow: auto; padding: 18px; }
+
+.contents-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.contents-head h2 { font-size: 23px; letter-spacing: -.035em; }
+#contents-list { display: grid; gap: 4px; }
+
+.contents-number { min-width: 23px; color: var(--accent-light); font: 500 13px var(--mono); }
+.contents-keys { margin-top: 13px; color: var(--muted); font-size: 12px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (max-width: 920px) {
+  .cover { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .cover h1 { font-size: clamp(41px, 6.4vw, 66px); }
+  .deck-footer { grid-template-columns: auto minmax(100px, 1fr) auto; }
+  .deck-chapter { display: none; }
+  .architecture-detail { grid-template-columns: 1fr; }
+}
+@media (max-width: 690px) {
+  :root { --gutter: 19px; }
+  .deck-header { min-height: 57px; gap: 8px; }
+  .deck-header .brand-mark { width: 30px; height: 30px; flex-basis: 30px; }
+  .deck-header .brand-name { font-size: 16px; }
+  .header-actions { gap: 3px; }
+  .header-actions .btn { padding-inline: 7px; }
+  .header-actions .fullscreen { display: none; }
+  .slide { padding-block: 24px; }
+  .slide-heading { margin-bottom: 22px; }
+  .slide h2 { font-size: clamp(32px, 7.7vw, 49px); }
+  .grading-layout, .ending { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .cover { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 22px; }
+  .cover h1 { font-size: clamp(36px, 7vw, 56px); }
+  .ending h2 { font-size: clamp(42px, 10.4vw, 65px); }
+  .cover-lead { margin-top: 14px; font-size: 23px; }
+  .cover-actions { margin-top: 17px; }
+  .cover-actions .btn { min-height: 44px; padding-inline: 12px; }
+  .kicker { margin-bottom: 12px; }
+  .flow-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow-number { margin-bottom: 8px; }
+  .phone-visual { width: min(100%, 22dvh, 176px); }
+  .slide .review-note { margin-top: 17px; }
+  .architecture { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .architecture > .arch-node { padding: 10px 14px; }
+  .architecture > .arch-node br { display: none; }
+  .architecture > .arch-node .arch-sep { display: inline; }
+  .arch-connector:first-of-type { width: var(--border-width); height: 18px; justify-self: center; margin: 0; }
+  .arch-connector:first-of-type::after { right: auto; left: 50%; top: auto; bottom: 2px; width: 7px; height: 7px; transform: translateX(-50%) rotate(135deg); }
+  .arch-connector.branch { width: var(--border-width); height: 9px; margin: 0 0 0 18px; background: color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent); }
+  .arch-services { grid-template-columns: minmax(0, 1fr); padding-left: 32px; gap: 7px; }
+  .arch-services .arch-node { padding: 9px 14px; }
+  .arch-services .arch-node::before { left: calc(-14px - var(--border-width)); width: 14px; }
+  .arch-services .arch-node::after { left: calc(-14px - var(--border-width)); bottom: calc(-7px - 2 * var(--border-width)); }
+  .arch-services .arch-node:first-child::after { top: calc(-1 * var(--border-width)); }
+  .arch-services .arch-node:last-child::after { bottom: 50%; }
+  .arch-node .caption { font-size: 9.5px; letter-spacing: .05em; }
+  .arch-node h3 { margin: 3px 0 3px; font-size: 15px; }
+  .arch-node p { font-size: 12px; line-height: 1.4; }
+  .architecture-detail { margin-top: 12px; gap: 9px; }
+  .architecture-controls { gap: 6px; }
+  .architecture-controls .btn { flex: 1 1 auto; min-height: 36px; padding: 6px 9px; font-size: 12px; }
+  .architecture-detail p { font-size: 13px; line-height: 1.5; }
+  .ending-mark { display: none; }
+  .deck-footer { gap: 8px; min-height: 59px; }
+  .deck-progress { gap: 3px; }
+  .deck-counter { font-size: 11px; }
+  .deck-arrows .next { min-width: 60px; }
+  .deck-arrows .btn { min-height: 42px; padding-inline: 9px; font-size: 13px; }
+  .deck-arrows .icon-btn { width: 34px; font-size: 18px; }
+}
+@media (max-width: 540px) {
+  .cover { grid-template-columns: minmax(0, 1fr); padding: 24px 20px 0; gap: 22px; }
+  .cover h1 { font-size: clamp(38px, 10.5vw, 50px); }
+  .cover-lead { margin: 12px 0 9px; font-size: clamp(20px, 5.4vw, 23px); }
+  .cover-copy .description { font-size: 15px; line-height: 1.55; }
+  .cover-actions { margin-top: 18px; }
+  .cover-actions .btn { flex: 1 1 auto; }
+  .phone-visual { position: relative; width: min(78%, 242px); max-height: min(31dvh, 238px); overflow: hidden; }
+  .phone-visual::after { content: ""; position: absolute; inset: auto 0 0; height: 28px; z-index: 4; pointer-events: none; background: linear-gradient(to bottom, transparent, #111925); }
+}
+@media (max-height: 690px) and (min-width: 691px) {
+  .deck-header { min-height: 53px; }
+  .deck-footer { min-height: 56px; }
+  .slide { padding-block: 22px; }
+  .slide-heading { margin-bottom: 19px; }
+  .slide h2 { font-size: clamp(31px, 5vw, 55px); }
+  .demo-slide h2 { font-size: clamp(30px, 4vw, 44px); }
+  .ending h2 { font-size: clamp(50px, 6.35vw, 101px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+.demo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+  border-radius: 17px;
+}
+
+.demo .demo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 16px;
+  border-bottom: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  background: rgba(8, 16, 29, .6);
+}
+
+.demo .demo-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  width: min(100%, 650px);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.demo .demo-steps li { min-width: 0; }
+
+.demo .demo-steps .nav-link {
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 5px 6px;
+}
+
+.demo .demo-steps button span {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .74rem;
+  color: var(--accent-light);
+}
+
+.demo .demo-steps button:disabled span { color: inherit; }
+
+
+.demo .demo-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(12px, 2vw, 22px);
+  min-height: 270px;
+  padding: clamp(14px, 2vw, 22px);
+  animation: page-arrive .35s ease both;
+}
+
+.demo [hidden] { display: none !important; }
+
+
+.demo .demo-form { display: grid; gap: 8px; margin: 0; }
+.demo .demo-form label {
+  display: block;
+  color: #d7e1ef;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.demo .demo-form input, .demo .demo-form textarea {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 43px;
+  padding: 9px 12px;
+  border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+  border-radius: 10px;
+  color: var(--text);
+  background: rgba(7, 16, 30, .75);
+  font: inherit;
+  font-size: 16px;
+}
+
+.demo .demo-form input:focus, .demo .demo-form textarea:focus {
+  outline: 2px solid var(--focus-ring); outline-offset: -2px;
+  background: rgba(15, 26, 46, .95);
+}
+
+.demo .demo-form textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
+.demo [data-demo-panel="0"] { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+.demo .demo-setup-form {
+  width: min(100%, 620px); display: flex; flex-direction: column; gap: 0;
+  border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent); border-radius: 19px; background: #101c30; overflow: hidden;
+}
+.demo .demo-setup-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+  padding: 17px 20px 15px; border-bottom: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  background: var(--surface-raised);
+}
+.demo .demo-setup-header h3 { margin: 5px 0 3px; font-size: 22px; line-height: 1.2; letter-spacing: -.035em; }
+.demo .demo-setup-header .eyebrow { color: #b7a8ff; font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+.demo .demo-setup-header p { margin: 0; color: #899fbe; font-size: 11px; }
+.demo .demo-setup-body { min-height: 0; padding: 19px 20px; scrollbar-width: thin; scrollbar-color: #3d506c transparent; }
+.demo .demo-setup-header, .demo .demo-setup-footer { flex: 0 0 auto; }
+.demo .demo-setup-field { margin: 0 0 16px; }
+.demo .demo-bridge-bar {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  margin: 0 0 16px; padding: 10px 12px; border-radius: 12px;
+  border: var(--border-width) solid color-mix(in srgb, rgba(230, 213, 184, .3) var(--border-coverage), transparent);
+  background: linear-gradient(145deg, rgba(230, 213, 184, .09), rgba(13, 23, 40, .75));
+}
+.demo .demo-bridge-copy { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.demo .demo-bridge-mark {
+  display: grid; place-items: center; width: 26px; height: 26px; flex: 0 0 26px; border-radius: 8px;
+  background: #e6d5b8; color: #17130d; font-size: 13px; font-weight: 800;
+}
+.demo .demo-bridge-copy strong { display: block; color: #f6f1e7; font-size: 12px; font-weight: 760; line-height: 1.25; }
+.demo .demo-bridge-copy small { display: block; color: var(--muted); font-size: 10px; line-height: 1.35; }
+.demo .demo-bridge-btn { min-height: 32px; padding: 6px 11px; font-size: 11px; border-radius: 8px; white-space: nowrap; }
+.demo .demo-setup-field label { margin-bottom: 7px; }
+.demo .demo-setup-field textarea { min-height: 135px; }
+.demo .demo-setup-footer {
+  display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 9px;
+  padding: 12px 20px; border-top: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); background: rgba(9,19,33,.67);
+}
+.demo .demo-setup-heading {
+  margin: 23px 0 13px; padding-top: 16px; border-top: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+  color: #e6eafa; font-size: 12px; font-weight: 800;
+}
+.demo .demo-option-grid { display: grid; gap: 9px; }
+.demo .demo-form .demo-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 11px 12px; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 11px;
+  background: rgba(7,16,30,.47); cursor: pointer;
+  transition: border-color 400ms ease;
+}
+.demo .demo-toggle:hover { border-color: color-mix(in srgb, rgba(160,146,248,.31) var(--border-coverage), transparent); }
+.demo .demo-switch { position: relative; flex: 0 0 auto; width: 35px; height: 21px; }
+.demo .demo-form .demo-switch input {
+  position: absolute; z-index: 1; inset: 0; opacity: 0; width: 100%; min-height: 0;
+  height: 100%; margin: 0; padding: 0; cursor: pointer;
+}
+.demo .demo-switch > span {
+  position: absolute; inset: 0; border: var(--border-width) solid color-mix(in srgb, #465970 var(--border-coverage), transparent); border-radius: 30px;
+  background: #26364c; pointer-events: none; transition: background .2s;
+}
+.demo .demo-switch > span::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 13px; height: 13px;
+  border-radius: 50%; background: #a0b1c5; transition: transform .2s, background .2s;
+}
+.demo .demo-switch input:checked + span { background: #7065d6; border-color: color-mix(in srgb, #7f72d5 var(--border-coverage), transparent); }
+.demo .demo-switch input:checked + span::after { transform: translateX(14px); background: #fff; }
+.demo .demo-switch input:focus-visible + span { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.demo .demo-toggle:has(input:disabled) { opacity: .65; cursor: default; }
+.demo .demo-form .demo-switch input:disabled { cursor: default; }
+.demo .demo-toggle.is-unavailable, .demo .demo-toggle.is-unavailable input:disabled { cursor: not-allowed; }
+.demo .demo-option-status { margin-left: 5px; color: #b7a8ff; font-size: 10px; font-weight: 750; }
+.demo .demo-option-description { display: block; margin-top: 4px; color: #bac8dc; font-size: 11px; font-weight: 450; line-height: 1.45; }
+.demo .demo-field-note { margin: 6px 0 0; color: #8296b1; font-size: 10px; line-height: 1.5; }
+@media (max-width: 680px) {
+  .demo .demo-setup-header, .demo .demo-setup-body, .demo .demo-setup-footer { padding-inline: 13px; }
+}
+
+.demo .demo-form > .btn { justify-self: start; margin-top: 8px; }
+
+
+
+.demo .demo-question,
+
+.demo .demo-rule b,
+
+
+
+.demo .demo-replay { flex: 0 0 auto; margin-left: auto; white-space: nowrap; }
+
+
+.demo .demo-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.demo-slide .compact-heading { margin-bottom: 12px; }
+.demo-slide .compact-heading h2 { font-size: clamp(24px, 3vw, 36px); }
+.demo-slide .compact-heading .description {
+  max-width: 92ch; margin-top: 6px;
+  font-size: clamp(13px, 1.18vw, 16px); line-height: 1.42;
+}
+
+@media (max-width: 680px) {
+  .demo .demo-toolbar { flex-wrap: wrap; gap: 5px; padding: 8px 10px; }
+  .demo .demo-steps { flex: 1 0 100%; width: 100%; }
+  .demo .demo-steps .nav-link { flex-direction: column; gap: 1px; padding-inline: 0; font-size: .69rem; }
+  .demo .demo-panel { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 15px; padding: 16px 12px; }
+}
+
+/* Keep the demo controls on screen. Lengthy content scrolls within the active step. */
+@keyframes demo-appear { from { opacity: .65; } to { opacity: 1; } }
+@media (min-height: 550px) and (min-width: 681px), (min-height: 620px) and (max-width: 680px) {
+  .demo-slide:not([hidden]) {
+    display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100%;
+    min-height: 0; margin-block: 0; overflow: hidden;
+  }
+  .demo-slide.is-active, .demo-slide .demo-panel { animation-name: demo-appear; }
+  .demo-slide .demo { display: grid; grid-template-rows: auto minmax(0, 1fr); min-height: 0; }
+  .demo .demo-panel {
+    min-height: 0; padding: clamp(8px, 1.8dvh, 18px);
+    overflow-y: auto; overscroll-behavior-y: contain;
+    scrollbar-width: thin; scrollbar-color: var(--border-bright) transparent;
+  }
+  .demo [data-demo-panel="0"] { grid-template-rows: minmax(0, 1fr); align-items: stretch; overflow: hidden; }
+  .demo .demo-setup-form { min-height: 0; max-height: 100%; }
+  .demo .demo-setup-body { flex: 1 1 auto; overflow-y: auto; overscroll-behavior-y: contain; }
+  .demo .demo-setup-field textarea { min-height: 96px; }
+}
+
+@media (min-width: 681px) and (min-height: 550px) {
+  .demo .demo-panel:not([data-demo-panel="0"]) { grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+}
+
+@media (min-height: 550px) and (min-width: 681px), (min-height: 620px) and (max-width: 680px) {
+}
+
+@media (max-width: 680px) and (min-height: 620px) {
+  .demo [data-demo-panel="2"] { grid-template-rows: auto minmax(0, 1fr); overflow: hidden; }
+}
+
+@media (min-width: 681px) and (max-height: 760px) {
+  .slide:not(.demo-slide) { padding-block: 16px; }
+  .slide:not(.demo-slide) .slide-heading { margin-bottom: 16px; }
+  .slide:not(.demo-slide) .slide-heading h2 + p { margin-top: 9px; }
+  .rubric, .feedback-preview { padding: 14px 18px; }
+  .rubric th, .rubric td { padding-block: 7px; }
+  .slide .review-note { margin-top: 11px; }
+  .architecture .arch-node { padding: 12px 16px; }
+  .architecture-detail { margin-top: 12px; }
+}
+
+@media (max-width: 680px) {
+  .demo-slide { padding-block: 9px; }
+  .demo-slide .compact-heading { margin-bottom: 8px; }
+  .demo .demo-steps .nav-link { min-height: 36px; }
+  .demo .demo-replay { min-height: 30px; padding: 4px 8px; font-size: 12px; }
+  .demo .demo-panel { gap: 8px; }
+  .demo .demo-setup-header, .demo .demo-setup-footer { padding-block: 9px; }
+  .demo .demo-setup-body { padding-block: 10px; }
+  .demo .demo-form .demo-toggle { padding-block: 8px; }
+  .demo .demo-setup-field { margin-bottom: 10px; }
+  .demo .demo-setup-heading { margin: 14px 0 9px; padding-top: 9px; }
+  .demo .demo-option-grid { gap: 6px; }
+  .slide:not(.demo-slide) { padding-block: 16px; }
+  .slide:not(.demo-slide) .slide-heading { margin-bottom: 14px; }
+  .slide:not(.demo-slide) .slide-heading h2 + p { margin-top: 8px; }
+  .grading-layout { gap: 10px; }
+  .rubric, .feedback-preview { padding: 12px; }
+  .rubric th, .rubric td { padding-block: 6px; }
+  .feedback-preview {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "caption note" "score note";
+    align-items: center; gap: 4px 12px;
+  }
+  .feedback-preview > .caption { grid-area: caption; white-space: normal; max-width: 12ch; }
+  .feedback-preview > .score-preview { grid-area: score; margin: 0; font-size: 38px; }
+  .feedback-preview > p:last-child { grid-area: note; font-size: 13px; line-height: 1.45; }
+}
+
+@media (max-width: 680px) and (min-height: 620px) and (max-height: 720px) {
+  .demo-slide .compact-heading .description { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo .demo-panel { animation: none; }
+}
+
+#la-demo .demo-portal .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 40px; padding: 9px 16px; border: var(--border-width) solid transparent; border-radius: 10px; color: white; background: #6353c9; box-shadow: none; font-size: 12px; font-weight: 750; line-height: 1.3; transition: transform 400ms ease, filter 400ms ease, background-color 400ms ease, border-color 400ms ease; text-align: center; }
+#la-demo .demo-portal .btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.07); box-shadow: none; }
+#la-demo .demo-portal .btn:active:not(:disabled) { transform: none; }
+#la-demo .demo-portal .btn-secondary { background: rgba(23, 39, 63, .74); border-color: color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent); box-shadow: none; color: #d3ddec; }
+#la-demo .demo-portal .btn-secondary:hover:not(:disabled) { box-shadow: none; background: rgba(33, 51, 78, .9); }
+#la-demo :is(.demo-portal, .results-panel) .aurora-field {
+      border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+      border-radius: var(--radius-sm);
+      background: rgba(7, 16, 30, .75);
+      color: var(--text);
+      transition: border-color 400ms ease, background-color 400ms ease; }
+#la-demo :is(.demo-portal, .results-panel) .aurora-field:focus {
+      outline: 2px solid var(--focus-ring); outline-offset: -2px;
+      background-color: rgba(15, 26, 46, .95);
+}
+#la-demo .demo-portal .form-link {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+      margin-top: 12px;
+      color: #b5a9ff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 400ms ease; }
+#la-demo .demo-portal .form-link:hover { color: #e0daff; text-decoration: none; }
+#la-demo .demo-portal #demo-join-card, #la-demo .demo-portal #demo-checkin-card {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      width: min(100%, 760px);
+      margin: 14px auto 0;
+      padding: 83px clamp(28px, 7vw, 68px) 66px;
+      border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+      border-radius: 30px;
+      background: linear-gradient(155deg, #182333, #111925 72%);
+      box-shadow: var(--shadow); }
+#la-demo .demo-portal #demo-join-card::before, #la-demo .demo-portal #demo-checkin-card::before {
+      content: "✦  LEARNAUDITOR / EXAM PORTAL";
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 28px;
+      padding: 7px 12px;
+      border: var(--border-width) solid color-mix(in srgb, rgba(138, 121, 255, .24) var(--border-coverage), transparent);
+      border-radius: 50px;
+      color: #beb3ff;
+      background: rgba(127, 106, 238, .1);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em; }
+#la-demo .demo-portal #demo-join-card > *, #la-demo .demo-portal #demo-checkin-card > * { position: relative; z-index: 1; }
+#la-demo .demo-portal #demo-join-card h2, #la-demo .demo-portal #demo-checkin-card h2, #la-demo .demo-portal #demo-exam-view > h2 {
+      margin: 0 0 14px;
+      color: #f4f7ff;
+      font-size: clamp(32px, 4.5vw, 53px);
+      line-height: 1.12;
+      font-weight: 800;
+      letter-spacing: -.055em; }
+#la-demo .demo-portal #demo-join-card > p:first-of-type {
+      max-width: 460px;
+      margin: 0 0 38px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8; }
+#la-demo .demo-portal #demo-join-card form { max-width: 510px; }
+#la-demo .demo-portal #demo-join-card form > p, #la-demo .demo-portal #demo-join-form > p { margin: 0 0 21px; }
+#la-demo .demo-portal label {
+      display: block;
+      margin-bottom: 10px;
+      color: #d9e2f3;
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: .02em; }
+#la-demo .demo-portal input, #la-demo .demo-portal textarea {
+      width: 100%;
+      font: inherit; }
+#la-demo .demo-portal input {
+      min-height: 58px;
+      padding: 15px 18px; }
+#la-demo .demo-portal input::placeholder, #la-demo .demo-portal textarea::placeholder { color: #7789a7; opacity: 1; }
+#la-demo .demo-portal input:hover, #la-demo .demo-portal textarea:hover { border-color: color-mix(in srgb, rgba(166, 177, 241, .4) var(--border-coverage), transparent); }
+#la-demo .demo-portal #demo-code {
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 23px;
+      font-weight: 780;
+      letter-spacing: .25em;
+      font-variant-numeric: tabular-nums; }
+#la-demo .demo-portal #demo-join-card button, #la-demo .demo-portal #demo-join-form button { width: 100%; min-height: 57px; margin-top: 6px; }
+#la-demo .demo-portal #demo-join-card button::after, #la-demo .demo-portal #demo-checkin-submit::after { content: "↗"; font-size: 20px; line-height: 0; font-weight: 400; }
+#la-demo .demo-portal #join-error:empty, #la-demo .demo-portal #checkin-error:empty { display: none; }
+#la-demo .demo-portal #demo-join-card > [role="alert"]:not(:empty), #la-demo .demo-portal #checkin-error:not(:empty) { margin-top: 22px; }
+#la-demo .demo-portal #demo-checkin-card { width: min(100%, 810px); padding-top: 68px; }
+#la-demo .demo-portal #demo-checkin-card > h2 { font-size: clamp(30px, 4vw, 46px); overflow-wrap: anywhere; }
+#la-demo .demo-portal #demo-checkin-card > p:nth-of-type(1), #la-demo .demo-portal #demo-checkin-card > p:nth-of-type(2) {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 12px 10px 16px 0;
+      padding: 7px 13px;
+      border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+      border-radius: 50px;
+      color: #a8b9d1;
+      background: rgba(11, 22, 39, .72);
+      font-size: 13px; }
+#la-demo .demo-portal #demo-checkin-card > p:nth-of-type(1) strong, #la-demo .demo-portal #demo-checkin-card > p:nth-of-type(2) strong { color: #ecebff; }
+#la-demo .demo-portal #demo-join-form {
+      padding: 28px;
+      border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+      border-radius: 20px;
+      background: rgba(6, 15, 29, .42); }
+#la-demo .demo-portal #demo-checkin-card > p:last-child { margin: 25px 0 0; font-size: 14px; }
+#la-demo .demo-portal #demo-checkin-card > p:last-child a::before { content: "← "; }
+#la-demo .demo-portal #demo-exam-view { max-width: 1040px; margin: 0 auto; }
+#la-demo .demo-portal #demo-exam-view > h2 {
+      margin: 1px 0 27px;
+      font-size: clamp(30px, 4.5vw, 47px);
+      overflow-wrap: anywhere; }
+#la-demo .demo-portal #demo-student-profile {
+      min-height: 108px;
+      margin-bottom: 20px;
+      padding: 17px 22px;
+      border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+      border-radius: 20px;
+      background: var(--surface-raised);
+      box-shadow: 0 14px 45px rgba(0,0,0,.12); }
+#la-demo .demo-portal #demo-student-avatar {
+      width: 76px;
+      height: 76px;
+      border: var(--border-width) solid color-mix(in srgb, rgba(161, 151, 255, .42) var(--border-coverage), transparent);
+      border-radius: 17px !important;
+      background: #1b2d4b;
+      box-shadow: 0 0 0 4px rgba(129, 114, 233, .07); }
+#la-demo .demo-portal #demo-student-profile p { margin: 4px 0; color: #9fb0c7; font-size: 13px; }
+#la-demo .demo-portal #demo-student-profile strong { color: #f2f5ff; font-size: 18px; }
+#la-demo .demo-portal #demo-exam-view > p {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650; }
+#la-demo .demo-portal #demo-page-indicator {
+      display: inline-flex;
+      align-items: center;
+      min-height: 35px;
+      padding: 5px 13px;
+      border: var(--border-width) solid color-mix(in srgb, rgba(137, 122, 255, .28) var(--border-coverage), transparent);
+      border-radius: 50px;
+      color: #cdc5ff;
+      background: rgba(120, 106, 238, .14);
+      font-size: 13px;
+      font-weight: 800; }
+#la-demo .demo-portal #demo-exam-view > hr { margin: 22px 0; }
+#la-demo .demo-portal .exam-page {
+      position: relative;
+      padding: clamp(26px, 5.3vw, 54px);
+      border: var(--border-width) solid color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent);
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #162131, #111925 72%);
+      box-shadow: 0 26px 75px rgba(0, 0, 0, .2);
+      animation: page-arrive .35s ease both; }
+#la-demo .demo-portal .exam-page h3 { margin: 0 0 10px; font-size: 28px; font-weight: 790; line-height: 1.25; letter-spacing: -.04em; }
+#la-demo .demo-portal .exam-page > p { margin: 0 0 21px; color: var(--muted); line-height: 1.85; }
+#la-demo .demo-portal .task-section > h3::before {
+      content: "";
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      margin-right: 12px;
+      vertical-align: middle;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 16px rgba(89, 223, 216, .48); }
+#la-demo .demo-portal .task-form fieldset {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin: 0;
+      padding: 22px 25px 25px;
+      border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent);
+      border-radius: 18px;
+      background: rgba(6, 14, 27, .45); }
+#la-demo .demo-portal .task-form legend { padding: 0 9px; color: #dce5f7; font-size: 13px; font-weight: 800; letter-spacing: .045em; }
+#la-demo .demo-portal .task-form p { margin: 0 0 12px; }
+#la-demo .demo-portal .task-form p:has(textarea) { margin-bottom: 22px; }
+#la-demo .demo-portal textarea {
+      display: block;
+      min-height: 230px;
+      max-width: 100%;
+      padding: 18px 20px;
+      color: #e8effd;
+      line-height: 1.75;
+      resize: vertical;
+      font-size: 14px; }
+#la-demo .demo-portal .task-result-output:not(:empty) {
+      margin-top: 24px;
+      padding: 24px 28px;
+      border: var(--border-width) solid color-mix(in srgb, rgba(87, 217, 205, .22) var(--border-coverage), transparent);
+      border-radius: 16px;
+      color: #c4d7e7;
+      background: var(--surface);
+      overflow-wrap: anywhere; }
+#la-demo .demo-portal .task-result-output h3 { margin-bottom: 16px; color: #a4f1e8; font-size: 20px; }
+#la-demo .demo-portal .task-result-output p { margin: 8px 0; line-height: 1.75; white-space: pre-wrap; }
+#la-demo .demo-portal .task-result-output strong { color: #f3f6ff; }
+#la-demo .demo-portal #demo-exam-view nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-top: 23px; }
+#la-demo .demo-portal #demo-join-card, #la-demo .demo-portal #demo-checkin-card { width: min(100%, 580px); margin: 0 auto; padding: 27px clamp(20px, 4vw, 36px) 28px; border-radius: 19px; }
+#la-demo .demo-portal #demo-join-card::before, #la-demo .demo-portal #demo-checkin-card::before { margin-bottom: 13px; padding: 5px 10px; font-size: 9px; }
+#la-demo .demo-portal #demo-join-card h2, #la-demo .demo-portal #demo-checkin-card h2, #la-demo .demo-portal #demo-exam-view > h2 { font-size: clamp(23px, 3vw, 32px); margin-bottom: 8px; letter-spacing: -.04em; }
+#la-demo .demo-portal #demo-join-card > p:first-of-type { font-size: 13px; line-height: 1.5; margin-bottom: 19px; }
+#la-demo .demo-portal #demo-join-card form > p, #la-demo .demo-portal #demo-join-form > p { margin-bottom: 13px; }
+#la-demo .demo-portal label { margin-bottom: 5px; font-size: 12px; }
+#la-demo .demo-portal input { min-height: 43px; padding: 9px 12px; }
+#la-demo .demo-portal #demo-code { font-size: 18px; letter-spacing: .18em; }
+#la-demo .demo-portal #demo-join-card button, #la-demo .demo-portal #demo-join-form button { min-height: 43px; margin-top: 2px; }
+#la-demo .demo-portal #demo-checkin-card { width: min(100%, 620px); padding-top: 25px; }
+#la-demo .demo-portal #demo-checkin-card > h2 { font-size: clamp(22px, 3vw, 30px); }
+#la-demo .demo-portal #demo-checkin-card > p:nth-of-type(1), #la-demo .demo-portal #demo-checkin-card > p:nth-of-type(2) { margin: 5px 7px 7px 0; padding: 4px 9px; font-size: 11px; }
+#la-demo .demo-portal #demo-checkin-card > h3 { margin: 13px 0 10px; font-size: 16px; }
+#la-demo .demo-portal #demo-join-form { padding: 16px; border-radius: 13px; }
+#la-demo .demo-portal #demo-checkin-card > p:last-child { margin-top: 13px; }
+#la-demo .demo-portal #demo-checkin-card > hr, #la-demo .demo-portal #demo-exam-view > hr, #la-demo .demo-portal .exam-page > hr { margin: 12px 0 15px; }
+#la-demo .demo-portal #demo-exam-view { max-width: 920px; }
+#la-demo .demo-portal #demo-exam-view > h2 { margin-bottom: 12px; }
+#la-demo .demo-portal #demo-student-profile { min-height: 64px; padding: 8px 13px; margin-bottom: 10px; border-radius: 13px; gap: 10px !important; }
+#la-demo .demo-portal #demo-student-avatar { width: 46px; height: 46px; border-radius: 11px !important; }
+#la-demo .demo-portal #demo-student-profile p { font-size: 11px; margin: 2px 0; }
+#la-demo .demo-portal #demo-student-profile strong { font-size: 14px; }
+#la-demo .demo-portal #demo-exam-view > p { margin-bottom: 9px; gap: 7px; font-size: 11px; }
+#la-demo .demo-portal #demo-page-indicator { min-height: 26px; padding: 3px 9px; font-size: 11px; }
+#la-demo .demo-portal #demo-exam-view > hr { margin: 10px 0; }
+#la-demo .demo-portal .exam-page { padding: clamp(16px, 2.7vw, 26px); border-radius: 16px; }
+#la-demo .demo-portal .exam-page h3 { font-size: 19px; margin-bottom: 7px; }
+#la-demo .demo-portal .exam-page > p { margin-bottom: 12px; line-height: 1.55; }
+#la-demo .demo-portal .task-section > h3 { margin-bottom: 12px; padding: 5px 9px; font-size: 10px; }
+#la-demo .demo-portal .task-section > h4 { font-size: clamp(18px, 2.5vw, 23px); margin-bottom: 10px; }
+#la-demo .demo-portal .task-section > p { font-size: 13px; margin-bottom: 10px; line-height: 1.6; }
+#la-demo .demo-portal .task-section > hr { margin: 13px 0 15px; }
+#la-demo .demo-portal .task-form fieldset { padding: 12px 15px 15px; border-radius: 12px; }
+#la-demo .demo-portal .task-form p { margin-bottom: 6px; }
+#la-demo .demo-portal .task-form p:has(textarea) { margin-bottom: 10px; }
+#la-demo .demo-portal textarea { min-height: 110px; height: clamp(110px, 19vh, 190px); padding: 11px 13px; font-size: 13px; line-height: 1.55; }
+#la-demo .demo-portal .task-result-output:not(:empty) { padding: 13px 16px; margin-top: 12px; }
+#la-demo .demo-portal .task-result-output h3 { font-size: 16px; }
+#la-demo .demo-portal #demo-exam-view nav { margin-top: 12px; gap: 10px; }
+#la-demo .demo-portal #demo-join-card > [role="alert"]:not(:empty), #la-demo .demo-portal #checkin-error:not(:empty) { margin-top: 12px; }
+#la-demo .demo-portal #demo-exam-view:not([hidden]) { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; height: 100%; max-width: none; min-height: 0; }
+#la-demo .demo-portal .exam-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-width: 0; }
+#la-demo .demo-portal .exam-heading > h2 { min-width: 0; margin: 0; font-size: clamp(19px, 2.2vw, 27px); line-height: 1.3; letter-spacing: -.035em; overflow-wrap: anywhere; }
+#la-demo .demo-portal .exam-heading #demo-student-profile { flex: 0 0 auto; min-height: 0; max-width: 40%; margin: 0; padding: 7px 11px; border-radius: 11px; box-shadow: none; }
+#la-demo .demo-portal .exam-heading #demo-student-profile > div { min-width: 0; overflow-wrap: anywhere; }
+#la-demo .demo-portal .exam-heading #demo-student-avatar { width: 34px; height: 34px; flex: 0 0 34px; object-fit: cover; border-radius: 8px !important; box-shadow: none; }
+#la-demo .demo-portal .exam-heading #demo-student-profile p { margin: 0; font-size: 11px; }
+#la-demo .demo-portal .exam-heading #demo-student-profile strong { font-size: 13px; }
+#la-demo .demo-portal #demo-exam-pages { min-height: 0; min-width: 0; }
+#la-demo .demo-portal #demo-exam-pages > .exam-page { height: 100%; min-height: 0; margin: 0; animation: none; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #405272 transparent; }
+#la-demo .demo-portal #demo-exam-pages > .task-section { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: minmax(0, 1fr); padding: 0; overflow: hidden; }
+#la-demo .demo-portal .task-context { min-width: 0; min-height: 0; padding: 22px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+#la-demo .demo-portal .task-context:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -3px; }
+#la-demo .demo-portal .task-context > h3 { display: inline-flex; align-items: center; gap: 5px; margin: 0 0 14px; padding: 5px 9px; border: var(--border-width) solid color-mix(in srgb, rgba(106,231,216,.18) var(--border-coverage), transparent); border-radius: 30px; background: rgba(60,173,172,.08); color: #99e5e1; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+#la-demo .demo-portal .task-context > h4 { margin: 0 0 16px; color: var(--text); font-size: clamp(19px, 1.8vw, 25px); line-height: 1.35; letter-spacing: -.025em; overflow-wrap: anywhere; }
+#la-demo .demo-portal .task-context > p { margin: 0; color: #c4d2e6; font-size: 14px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+#la-demo .demo-portal .task-context .task-result-output:not(:empty) { margin-top: 20px; padding: 15px; font-size: 13px; }
+#la-demo .demo-portal .task-context .task-result-output h3 { font-size: 16px; }
+#la-demo .demo-portal .task-form { min-width: 0; min-height: 0; height: 100%; overflow: auto; padding: 20px 22px; border-left: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); background: rgba(6,14,27,.35); }
+#la-demo .demo-portal .task-form fieldset { height: 100%; min-height: 0; min-width: 0; padding: 0; border: 0; border-radius: 0; background: none; }
+#la-demo .demo-portal .task-form legend { padding: 0; margin-bottom: 12px; font-size: 13px; }
+#la-demo .demo-portal .task-form p { flex: 0 0 auto; margin: 0 0 8px; }
+#la-demo .task-answer-label { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+#la-demo .task-answer-count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#la-demo .task-answer-count.is-over-limit { color: var(--danger); }
+#la-demo .demo-portal .task-form p:has(textarea) { flex: 1 1 0; min-height: 84px; margin: 0 0 12px; }
+#la-demo .demo-portal .task-form textarea { width: 100%; height: 100%; min-height: 84px; resize: none; font-size: 16px; line-height: 1.75; padding: 15px; }
+#la-demo .demo-portal #demo-answer[readonly] { cursor: default; }
+#la-demo .demo-portal .task-form .submit-task-button { flex: 0 0 auto; min-height: 42px; }
+#la-demo .demo-portal #demo-exam-view > nav { margin: 0; padding-top: 0; gap: 10px; }
+#la-demo .demo-portal .exam-location { flex: 1; min-width: 0; margin: 0; color: var(--muted); font-size: 12px; }
+#la-demo .demo-portal #demo-page-indicator { font-size: 11px; min-height: 28px; padding: 4px 10px; }
+#la-demo .demo-portal #demo-exam-view > nav button { flex: 0 0 auto; min-width: 130px; min-height: 42px; }
+#la-demo .demo-portal #demo-exam-view:has(> #demo-clock:not([hidden])) { grid-template-rows: auto auto minmax(0, 1fr) auto; }
+#la-demo .demo-portal .exam-clock {
+      display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap;
+      padding: 7px 11px; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 10px;
+      background: rgba(99, 90, 208, .12); font-size: 12px; }
+#la-demo .demo-portal .exam-clock strong { color: #dacfff; font-size: 16px; font-variant-numeric: tabular-nums; }
+#la-demo .demo-portal .exam-clock.is-ending { border-color: color-mix(in srgb, rgba(244, 172, 119, .45) var(--border-coverage), transparent); }
+#la-demo .demo-portal .exam-clock.is-ending strong { color: #ffcb9d; }
+#la-demo .demo-portal .exam-notice { border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 10px; padding: 10px 12px; }
+#la-demo .demo-portal .task-form .draft-status[role="status"] { margin: 0 0 8px; padding: 4px 0; border: 0; background: none; font-size: 12px; }
+#la-demo .btn-sm { min-height: 32px; padding: 6px 10px; font-size: 11px; border-radius: 8px; }
+#la-demo .filter-select { height: 38px; max-width: 120px; padding: 0 9px; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 10px; background: #101d31; color: #c4d2e6; font-size: 11px; outline: none; }
+#la-demo .results-panel { margin-top: 24px; padding: 22px; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 17px; background: var(--surface); scroll-margin-top: 80px; }
+#la-demo .results-panel > .section-toolbar { margin-bottom: 14px; }
+#la-demo #results-metrics { margin: 0 0 18px; color: var(--muted); font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+#la-demo .results-filter { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 10px; row-gap: 7px; max-width: 620px; margin: 0 0 22px; padding: 0; }
+#la-demo .results-filter > label { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 11px; font-weight: 650; }
+#la-demo .results-filter > .filter-select { width: 100%; min-width: 0; max-width: none; height: 38px; }
+#la-demo .results-filter > .btn { min-height: 38px; margin: 0; }
+#la-demo .results-layout { display: grid; grid-template-columns: minmax(210px, 280px) minmax(0, 1fr); align-items: start; gap: 22px; }
+#la-demo .results-students { display: grid; align-content: start; min-width: 0; gap: 9px; max-height: 620px; padding: 2px 4px 4px 2px; overflow: auto; scrollbar-width: thin; scrollbar-color: #344561 transparent; }
+#la-demo .student-result { display: flex; align-items: center; gap: 11px; width: 100%; min-width: 0; padding: 13px 14px; color: var(--text); text-align: left; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 11px; background: var(--surface-soft); overflow-wrap: anywhere; transition: border-color 400ms ease, background-color 400ms ease; }
+#la-demo .student-result:hover { border-color: color-mix(in srgb, var(--border-bright) var(--border-coverage), transparent); background: rgba(136,120,255,.08); }
+#la-demo .student-result.selected { border-color: color-mix(in srgb, #6c6396 var(--border-coverage), transparent); background: #1b263d; box-shadow: none; }
+#la-demo .student-result strong { display: block; font-size: 13px; line-height: 1.4; }
+#la-demo .student-avatar { display: block; flex: 0 0 36px; width: 36px; height: 36px; border: var(--border-width) solid color-mix(in srgb, rgba(161,151,255,.24) var(--border-coverage), transparent); border-radius: 10px; background: #1b2d4b; object-fit: cover; }
+#la-demo .student-avatar-placeholder { display: grid; place-items: center; color: var(--muted); font-size: 14px; font-weight: 700; }
+#la-demo .student-result-info { flex: 1; min-width: 0; }
+#la-demo .student-result-head { display: flex; align-items: center; gap: 8px; }
+#la-demo .student-result-head strong { flex: 1; min-width: 0; }
+#la-demo .student-warning { display: inline-grid; place-items: center; flex: 0 0 20px; width: 20px; height: 20px; border: var(--border-width) solid color-mix(in srgb, rgba(247,199,124,.28) var(--border-coverage), transparent); border-radius: 50%; background: rgba(247,199,124,.09); color: #f7c77c; font-size: 12px; font-weight: 800; line-height: 1; }
+#la-demo .student-result small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#la-demo .results-detail { min-width: 0; padding: 16px; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 12px; background: rgba(7,17,32,.3); }
+#la-demo .results-detail > h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 7px; font-size: 17px; line-height: 1.4; overflow-wrap: anywhere; }
+#la-demo .results-detail > .result-summary { margin: 0 0 16px; }
+#la-demo .result-summary { color: var(--muted); font-size: 12px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+#la-demo .result-task { min-width: 0; margin: 10px 0 0; padding: 0; border: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); border-radius: 11px; background: rgba(13,23,40,.55); }
+#la-demo .result-task > summary { padding: 14px; cursor: pointer; font-size: 12px; font-weight: 700; line-height: 1.65; overflow-wrap: anywhere; }
+#la-demo .result-task[open] > summary { margin-bottom: 14px; border-bottom: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); color: #d8d0ff; }
+#la-demo .result-task > :not(summary) { margin-left: 14px; margin-right: 14px; }
+#la-demo .result-task > :last-child:not(summary) { margin-bottom: 14px; }
+#la-demo .result-task h4 { margin-top: 17px; margin-bottom: 7px; font-size: 11px; color: var(--muted); }
+#la-demo .result-task pre { max-width: 100%; padding: 12px; border-radius: 8px; background: rgba(7,13,25,.7); color: var(--text); font: inherit; font-size: 12px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+#la-demo .result-task .tag { max-width: calc(100% - 28px); white-space: normal; }
+#la-demo .grade-form { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); }
+#la-demo .grade-form label { display: flex; flex-direction: column; gap: 6px; margin: 0; color: var(--muted); font-size: 11px; }
+#la-demo .grade-form input[type="number"] { width: 90px; min-height: 40px; padding: 8px 10px; }
+#la-demo .grade-form .btn { min-height: 38px; }
+@media (max-width: 1000px) {
+  #la-demo .results-layout { grid-template-columns: minmax(170px, 220px) minmax(0, 1fr); gap: 16px; }
+}
+@media (max-width: 900px) {
+  #la-demo .results-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  #la-demo .results-panel { padding: 16px; }
+  #la-demo .results-layout { gap: 18px; }
+  #la-demo .results-detail { padding: 13px; }
+  #la-demo .grade-form input[type="number"], #la-demo .results-filter > .filter-select { font-size: 16px; }
+  #la-demo .results-filter > .filter-select, #la-demo .results-filter > .btn, #la-demo .grade-form .btn { min-height: 42px; }
+}
+
+/* Widoki demonstracyjne korzystają ze stylów portalu ucznia i panelu wyników. */
+#la-demo .demo-portal { min-width: 0; }
+#la-demo .demo-panel[data-demo-panel]:not([data-demo-panel="0"]) {
+  display: block; min-height: 0; overflow: auto; padding: clamp(10px, 1.6vw, 20px);
+}
+#la-demo #demo-join-card, #la-demo #demo-checkin-card { margin-inline: auto; }
+#la-demo #demo-join-card input, #la-demo #demo-checkin-card input { display: block; width: 100%; }
+#la-demo #demo-student-profile { display: flex; align-items: center; gap: 10px; }
+#la-demo .demo-extra-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+@media (min-width: 761px) and (max-height: 660px) {
+  #la-demo .demo-portal #demo-exam-view:not([hidden]) { min-height: 305px; }
+}
+#la-demo .demo-extra-actions button { min-height: 32px; }
+#la-demo .results-panel { margin: 0; line-height: 1.48; }
+#la-demo .section-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+#la-demo .section-toolbar h3 { margin: 0; font-size: 17px; }
+#la-demo .demo-setup-form .demo-toggle.is-unavailable { opacity: 1; border-color: color-mix(in srgb, rgba(104,123,150,.26) var(--border-coverage), transparent); background: rgba(7,16,30,.3); color: #8192aa; }
+#la-demo .demo-toggle.is-unavailable .demo-switch { opacity: .48; }
+
+#la-demo #demo-review-status:empty { display: none; }
+@media (max-width: 760px) {
+#la-demo .demo-portal .exam-heading { gap: 10px; }
+#la-demo .demo-portal .exam-heading > h2 { font-size: 17px; }
+#la-demo .demo-portal .exam-heading #demo-student-profile { max-width: 44%; padding: 5px 8px; gap: 7px !important; }
+#la-demo .demo-portal .exam-heading #demo-student-profile p { font-size: 10px; }
+#la-demo .demo-portal .exam-heading #demo-student-profile strong { font-size: 12px; }
+#la-demo .demo-portal .exam-heading #demo-student-avatar { width: 28px; height: 28px; flex-basis: 28px; }
+#la-demo .demo-portal #demo-exam-pages > .task-section { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+#la-demo .demo-portal .task-context { padding: 14px; }
+#la-demo .demo-portal .task-context > h3 { margin-bottom: 8px; }
+#la-demo .demo-portal .task-context > h4 { font-size: 18px; margin-bottom: 10px; }
+#la-demo .demo-portal .task-context > p { font-size: 13px; line-height: 1.6; }
+#la-demo .demo-portal .task-form { height: auto; overflow: visible; border-left: 0; border-top: var(--border-width) solid color-mix(in srgb, var(--border) var(--border-coverage), transparent); padding: 12px 14px; }
+#la-demo .demo-portal .task-form fieldset { height: auto; }
+#la-demo .demo-portal .task-form legend { margin-bottom: 5px; }
+#la-demo .demo-portal .task-form p:has(textarea) { flex: 0 0 auto; }
+#la-demo .demo-portal .task-form textarea { height: clamp(90px, 21dvh, 180px); padding: 10px; line-height: 1.5; }
+#la-demo .demo-portal .task-form .submit-task-button { width: 100%; min-height: 44px; }
+#la-demo .demo-portal #demo-exam-view > nav { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+#la-demo .demo-portal .exam-location { grid-column: 1 / -1; }
+#la-demo .demo-portal .exam-location > span { display: none; }
+#la-demo .demo-portal #demo-page-indicator { padding: 0; min-height: 20px; background: none; border: none; }
+#la-demo .demo-portal #demo-exam-view > nav button { min-width: 0; width: 100%; min-height: 44px; }
+  #la-demo .demo-portal #demo-exam-pages > .task-section { grid-template-rows: auto auto; }
+  #la-demo .demo-portal #demo-exam-view:not([hidden]) { height: auto; }
+  #la-demo .demo-portal #demo-exam-pages > .exam-page { height: auto; overflow: visible; }
+  #la-demo .demo-portal #demo-exam-pages > .task-section { overflow: hidden; }
+  #la-demo .demo-portal .task-context { overflow: visible; }
+  #la-demo .demo-portal .task-form textarea { height: 96px; }
+}
+.contents-head .icon-btn:focus-visible { border-color: transparent; outline-offset: -1px; }
+</style>
+</head>
+<body>
+  <header class="deck-header">
+    <button class="brand" type="button" data-goto="start" aria-label="LearnAuditor, przejdź na początek"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" focusable="false"><path d="M12 1.5 14.9 9.1 22.5 12 14.9 14.9 12 22.5 9.1 14.9 1.5 12 9.1 9.1Z"/></svg></span><span class="brand-name">LearnAuditor</span></button>
+    <div class="header-actions">
+      <button class="btn btn-ghost" id="open-contents" type="button" aria-haspopup="dialog">Spis slajdów</button>
+      <button class="btn btn-ghost fullscreen" id="fullscreen" type="button" title="Skrót F">Pełny ekran</button>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <section class="slide cover is-active" data-slide="start" data-title="Start" aria-labelledby="title-start">
+      <div class="cover-copy">
+        <p class="kicker">Projekt portfolio <span class="kicker-rule"></span> Filipesz</p>
+        <h1 id="title-start" tabindex="-1">Learn<span>Auditor</span></h1>
+        <p class="cover-lead">Egzaminy oceniane przez lokalnych agentów AI</p>
+        <p class="description">Prowadzący ustala kryteria. Uczeń rozwiązuje zadania w przeglądarce i otrzymuje ocenę z komentarzem.</p>
+        <div class="cover-actions">
+          <button class="btn" type="button" data-goto="demo">Uruchom demo <span aria-hidden="true">↗</span></button>
+          <button class="btn btn-secondary" type="button" data-goto="przebieg">Zobacz przebieg</button>
+        </div>
+      </div>
+      <figure class="phone-visual">
+        <div class="phone-device">
+          <div class="phone-screen" aria-hidden="true">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span>
+              <span class="phone-status-icons"><i class="phone-signal"></i><i class="phone-wifi"></i><i class="phone-battery"></i></span>
+            </div>
+            <div class="phone-exam">
+              <div class="phone-brand"><span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" focusable="false"><path d="M12 1.5 14.9 9.1 22.5 12 14.9 14.9 12 22.5 9.1 14.9 1.5 12 9.1 9.1Z"/></svg></span>LearnAuditor</div>
+              <div class="phone-exam-heading"><div class="phone-exam-name">HTTP i REST</div><span class="phone-clock">24:18</span></div>
+              <div class="phone-task">
+                <span class="phone-task-number">Zadanie 1</span>
+                <strong>Idempotentność metod HTTP</strong>
+                <p>Wyjaśnij, co się dzieje po ponowieniu identycznego żądania PUT lub POST.</p>
+              </div>
+              <div class="phone-answer"><strong>Twoja odpowiedź</strong><p>Wpisz swoje rozwiązanie…</p></div>
+              <span class="phone-submit">Zatwierdź i wyślij zadanie</span>
+              <div class="phone-exam-nav"><span>Zadanie 1 z 1</span><span>Następne →</span></div>
+            </div>
+            <span class="phone-home" aria-hidden="true"></span>
+          </div>
+          <svg class="phone-bezel" viewBox="0 0 868 1813" width="868" height="1813" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="ip18-frame" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#363c48"/>
+                <stop offset="18%" stop-color="#181b22"/>
+                <stop offset="38%" stop-color="#434a58"/>
+                <stop offset="62%" stop-color="#13161c"/>
+                <stop offset="82%" stop-color="#2d333f"/>
+                <stop offset="100%" stop-color="#0f1217"/>
+              </linearGradient>
+              <linearGradient id="ip18-rim" x1="0" y1="0" x2=".85" y2="1">
+                <stop offset="0%" stop-color="#8b95a8"/>
+                <stop offset="32%" stop-color="#2c323e"/>
+                <stop offset="68%" stop-color="#5d6678"/>
+                <stop offset="100%" stop-color="#1d212a"/>
+              </linearGradient>
+              <linearGradient id="ip18-btn" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#14171e"/>
+                <stop offset="22%" stop-color="#4b5364"/>
+                <stop offset="52%" stop-color="#232832"/>
+                <stop offset="82%" stop-color="#3a4150"/>
+                <stop offset="100%" stop-color="#101319"/>
+              </linearGradient>
+              <linearGradient id="ip18-cam-ctrl" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a1e27"/>
+                <stop offset="50%" stop-color="#41495b"/>
+                <stop offset="100%" stop-color="#151921"/>
+              </linearGradient>
+              <radialGradient id="ip18-lens" cx="38%" cy="36%" r="65%">
+                <stop offset="0%" stop-color="#385ec4"/>
+                <stop offset="52%" stop-color="#172554"/>
+                <stop offset="100%" stop-color="#060914"/>
+              </radialGradient>
+            </defs>
+            <rect x="7.5" y="326" width="9" height="72" rx="4" fill="url(#ip18-btn)"/>
+            <rect x="7.5" y="454" width="9" height="122" rx="4" fill="url(#ip18-btn)"/>
+            <rect x="7.5" y="606" width="9" height="122" rx="4" fill="url(#ip18-btn)"/>
+            <rect x="851.5" y="524" width="9" height="196" rx="4" fill="url(#ip18-btn)"/>
+            <rect x="851.5" y="1090" width="6" height="142" rx="3" fill="url(#ip18-cam-ctrl)"/>
+            <rect x="853" y="1097" width="3" height="128" rx="1.5" fill="#0d1017"/>
+            <path fill="url(#ip18-frame)" fill-rule="evenodd" d="M156 12H712A141 141 0 0 1 853 153V1660A141 141 0 0 1 712 1801H156A141 141 0 0 1 15 1660V153A141 141 0 0 1 156 12ZM156 21H712A132 132 0 0 1 844 153V1660A132 132 0 0 1 712 1792H156A132 132 0 0 1 24 1660V153A132 132 0 0 1 156 21Z"/>
+            <g fill="#0c0e13" opacity=".78">
+              <rect x="686" y="12" width="11" height="9"/>
+              <rect x="171" y="1792" width="11" height="9"/>
+              <rect x="15" y="188" width="9" height="11"/>
+              <rect x="15" y="1614" width="9" height="11"/>
+              <rect x="844" y="188" width="9" height="11"/>
+              <rect x="844" y="1614" width="9" height="11"/>
+            </g>
+            <rect x="15.6" y="12.6" width="836.8" height="1787.8" rx="140.4" fill="none" stroke="rgba(210,222,245,.26)" stroke-width="1.3"/>
+            <rect x="23" y="20" width="822" height="1773" rx="133" fill="none" stroke="url(#ip18-rim)" stroke-width="2"/>
+            <path fill="#040508" fill-rule="evenodd" d="M156 21H712A132 132 0 0 1 844 153V1660A132 132 0 0 1 712 1792H156A132 132 0 0 1 24 1660V153A132 132 0 0 1 156 21ZM156 35H712A118 118 0 0 1 830 153V1660A118 118 0 0 1 712 1778H156A118 118 0 0 1 38 1660V153A118 118 0 0 1 156 35Z"/>
+            <rect x="38" y="35" width="792" height="1743" rx="118" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1.5"/>
+            <rect x="386" y="25" width="96" height="4" rx="2" fill="#0d1017" stroke="rgba(255,255,255,.12)" stroke-width=".9"/>
+            <rect x="362" y="66" width="144" height="48" rx="24" fill="#030408" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/>
+            <circle cx="391" cy="90" r="6" fill="#090d19" opacity=".7"/>
+            <circle cx="480" cy="90" r="13" fill="#0b0e17" stroke="#1b2236" stroke-width="1"/>
+            <circle cx="480" cy="90" r="8.8" fill="url(#ip18-lens)"/>
+            <circle cx="480" cy="90" r="3.8" fill="#03050b"/>
+            <circle cx="477" cy="87" r="2.3" fill="#82adff" opacity=".88"/>
+            <circle cx="483" cy="93" r="1.4" fill="#59dfd8" opacity=".48"/>
+          </svg>
+        </div>
+      </figure>
+    </section>
+
+    <section class="slide" data-slide="przebieg" data-title="Przebieg" aria-labelledby="title-flow" hidden>
+      <header class="slide-heading">
+        <h2 id="title-flow" tabindex="-1">Przebieg egzaminu</h2>
+        <p class="description">Prowadzący przygotowuje zadania i udostępnia kod. Wyniki trafiają do tego samego panelu, w którym powstał test.</p>
+      </header>
+      <ol class="flow-list">
+        <li><span class="flow-number" aria-hidden="true">01</span><h3>Przygotowanie</h3><p>Prowadzący ustala kryteria i limit czasu (opcjonalnie może wczytać szkic z DocsHelpera).</p></li>
+        <li><span class="flow-number" aria-hidden="true">02</span><h3>Dołączenie</h3><p>Uczeń podaje kod i nick. Licznik rusza po rozpoczęciu egzaminu.</p></li>
+        <li><span class="flow-number" aria-hidden="true">03</span><h3>Ocena</h3><p>Po upływie limitu zapisane szkice trafiają do oceny automatycznie.</p></li>
+        <li><span class="flow-number" aria-hidden="true">04</span><h3>Wyniki</h3><p>Prowadzący przegląda odpowiedzi, wyniki i statystyki.</p></li>
+      </ol>
+    </section>
+
+    <section class="slide" data-slide="ocena" data-title="Ocena i weryfikacja" aria-labelledby="title-grade" hidden>
+      <header class="slide-heading">
+        <h2 id="title-grade" tabindex="-1">Ocena według kryteriów</h2>
+        <p class="description">Główny agent ocenia odpowiedź według kryteriów prowadzącego. W trybie Multiagent (Premium) dołączają dwa dodatkowe modele oceniające, a wynik i komentarz pochodzą od modelu, który wystawił środkową z trzech niezależnych ocen.</p>
+      </header>
+      <div class="grading-layout">
+        <div class="rubric">
+          <h3>Idempotentność metod HTTP</h3>
+          <table aria-label="Przykładowe kryteria zadania o metodach HTTP">
+            <tbody>
+              <tr><th scope="row">Definicja idempotentności</th><td>25 pkt</td></tr>
+              <tr><th scope="row">Wyjaśnienie metody PUT</th><td>25 pkt</td></tr>
+              <tr><th scope="row">Wyjaśnienie metody POST</th><td>25 pkt</td></tr>
+              <tr><th scope="row">Przykład ponowionego żądania</th><td>25 pkt</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="feedback-preview">
+          <p class="caption">Przykładowy wynik</p>
+          <p class="score-preview">100<span>%</span></p>
+          <p>Poprawnie rozróżniasz PUT i POST. Przykład pokazuje, że ponowienie identycznego żądania PUT daje ten sam zamierzony skutek.</p>
+        </div>
+      </div>
+      <p class="review-note"><span class="review-mark" aria-hidden="true">!</span><span>W trybie Multiagent odpowiedź trafia do weryfikacji po co najmniej dwóch zgodnych głosach. Uczeń i prowadzący widzą powód oznaczenia. Tymczasowe 0% może zmienić prowadzący. Tryb „Tylko AI” ocenia wyłącznie treść odpowiedzi.</span></p>
+    </section>
+
+    <section class="slide demo-slide" data-slide="demo" data-title="Demo egzaminu" aria-labelledby="title-demo" hidden>
+      <header class="slide-heading compact-heading">
+        <h2 id="title-demo" tabindex="-1">Demo egzaminu</h2>
+        <p class="description">Symulacja egzaminu w JavaScripcie, przygotowana z pomocą AI. Aplikacja korzysta ze Spring Boot i Thymeleaf.</p>
+      </header>
+<div class="demo" id="la-demo">
+  <div class="demo-toolbar">
+    <ol class="demo-steps" aria-label="Etapy demonstracji">
+      <li><button class="nav-link" type="button" data-demo-step="0" aria-current="step"><span aria-hidden="true">01</span> Test</button></li>
+      <li><button class="nav-link" type="button" data-demo-step="1" disabled><span aria-hidden="true">02</span> Wejście</button></li>
+      <li><button class="nav-link" type="button" data-demo-step="2" disabled><span aria-hidden="true">03</span> Odpowiedź</button></li>
+      <li><button class="nav-link" type="button" data-demo-step="3" disabled><span aria-hidden="true">04</span> Ocena</button></li>
+      <li><button class="nav-link" type="button" data-demo-step="4" disabled><span aria-hidden="true">05</span> Wyniki</button></li>
+    </ol>
+    <button class="btn btn-secondary demo-replay" type="button" id="demo-replay" hidden>Zacznij od nowa</button>
+  </div>
+
+  <section class="demo-panel" data-demo-panel="0" aria-labelledby="demo-setup-title">
+    <button class="btn" id="demo-open-setup" type="button" hidden>Utwórz test</button>
+    <form id="demo-setup-form" class="demo-form demo-setup-form">
+      <div class="demo-setup-header">
+        <div><span class="eyebrow">NOWY EGZAMIN</span><h3 id="demo-setup-title" tabindex="-1">Utwórz test</h3><p>Skonfiguruj test, a potem dodaj zadania.</p></div>
+        <button class="icon-btn" id="demo-close-setup" type="button" aria-label="Zamknij formularz">×</button>
+      </div>
+      <div class="demo-setup-body">
+        <div class="demo-bridge-bar">
+          <div class="demo-bridge-copy">
+            <span class="demo-bridge-mark" aria-hidden="true">▤</span>
+            <div><strong>Opcjonalny import z DocsHelpera</strong><small>Możesz wypełnić formularz ręcznie lub wczytać przykładowy szkic z notatek</small></div>
+          </div>
+          <button class="btn btn-secondary demo-bridge-btn" id="demo-import-docshelper" type="button">✦ Wczytaj szkic</button>
+        </div>
+        <div class="demo-setup-field">
+          <label for="demo-exam-title">Nazwa egzaminu</label>
+          <input id="demo-exam-title" type="text" value="HTTP i REST" maxlength="255" required>
+        </div>
+        <div class="demo-setup-field">
+          <label for="demo-lecture">Materiał / wykład</label>
+          <textarea id="demo-lecture"></textarea>
+        </div>
+        <div class="demo-setup-heading">Ustawienia testu</div>
+        <div class="demo-option-grid">
+              <label class="demo-toggle">Tylko AI <span class="demo-switch"><input id="demo-only-ai" type="checkbox" role="switch"><span aria-hidden="true"></span></span></label>
+              <label class="demo-toggle">Wieloagentowa ocena <span class="demo-switch"><input id="demo-multiagent" type="checkbox" role="switch"><span aria-hidden="true"></span></span></label>
+              <label class="demo-toggle is-unavailable">
+                <span><span id="demo-programming-label">Tryb programistyczny</span> <small class="demo-option-status">Zablokowany w demo</small>
+                  <small id="demo-programming-note" class="demo-option-description">Opcja testu dostępna od planu Plus.</small>
+                </span>
+                <span class="demo-switch"><input id="demo-programming" type="checkbox" role="switch" aria-labelledby="demo-programming-label" aria-describedby="demo-programming-note" disabled><span aria-hidden="true"></span></span>
+              </label>
+              <label class="demo-toggle">Wymagaj hasła <span class="demo-switch"><input id="demo-require-password" type="checkbox" role="switch"><span aria-hidden="true"></span></span></label>
+              <label class="demo-toggle">Zezwól na dołączanie <span class="demo-switch"><input id="demo-join-open" type="checkbox" role="switch" checked><span aria-hidden="true"></span></span></label>
+              <label class="demo-toggle">Limit czasu na rozwiązanie <span class="demo-switch"><input id="demo-timed" type="checkbox" role="switch"><span aria-hidden="true"></span></span></label>
+          <div class="demo-setup-field" id="demo-minutes-field" hidden>
+            <label for="demo-minutes">Czas od rozpoczęcia (minuty)</label>
+            <input id="demo-minutes" type="number" min="1" max="480" step="1" value="30" disabled>
+            <p class="demo-field-note">Po upływie czasu egzamin zakończy się automatycznie i odda zapisane szkice.</p>
+          </div>
+        </div>
+        <div class="demo-setup-field" id="demo-password-field" hidden style="margin-top:14px">
+          <label for="demo-password">Hasło egzaminu</label>
+          <input id="demo-password" type="password" autocomplete="new-password" disabled>
+        </div>
+      </div>
+      <div class="demo-setup-footer">
+        <button class="btn btn-secondary" id="demo-cancel-setup" type="button">Anuluj</button>
+        <button class="btn" type="submit">Utwórz test</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="demo-panel demo-portal" data-demo-panel="1" aria-label="Portal ucznia" hidden>
+    <section id="demo-join-card">
+      <h2 tabindex="-1">Dołącz do egzaminu</h2>
+      <p>Wpisz sześciznakowy kod otrzymany od prowadzącego.</p>
+      <form id="demo-code-form">
+        <p><label for="demo-code">Kod egzaminu:</label><input id="demo-code" class="aurora-field" type="text" value="HTTP01" minlength="6" maxlength="6" autocomplete="off" autocapitalize="characters" required></p>
+        <button class="btn" type="submit">Znajdź egzamin</button>
+      </form>
+      <a class="form-link" href="#demo" id="demo-back-setup"><span>Panel prowadzącego</span><span aria-hidden="true">↗</span></a>
+    </section>
+    <section id="demo-checkin-card" hidden>
+      <h2 data-demo-exam tabindex="-1">HTTP i REST</h2>
+      <p>Kod egzaminu: <strong>HTTP01</strong></p><p>Liczba zadań: <strong>1</strong></p>
+      <hr>
+      <p class="exam-notice" id="demo-join-closed" role="status" hidden>Prowadzący zamknął dołączanie do tego egzaminu.</p>
+      <h3 id="demo-checkin-title">Rejestracja ucznia</h3>
+      <p class="exam-notice" id="demo-join-time" hidden></p>
+      <form id="demo-join-form">
+        <p><label for="demo-name">Nick lub imię</label><input id="demo-name" class="aurora-field" type="text" value="Maja" maxlength="100" autocomplete="off" required></p>
+        <p id="demo-join-password-field" hidden><label for="demo-join-password">Hasło egzaminu:</label><input id="demo-join-password" class="aurora-field" type="password" autocomplete="off" disabled></p>
+        <button class="btn" id="demo-checkin-submit" type="submit">Rozpocznij egzamin</button>
+      </form>
+      <a class="form-link" id="demo-back-code" href="#demo">Wróć do wpisywania kodu</a>
+    </section>
+  </section>
+
+  <section class="demo-panel demo-portal" data-demo-panel="2" aria-label="Zadanie egzaminacyjne" hidden>
+    <div id="demo-exam-view">
+      <div class="exam-heading">
+        <h2 data-demo-exam tabindex="-1">HTTP i REST</h2>
+        <div id="demo-student-profile"><img id="demo-student-avatar" data-demo-avatar alt="" width="34" height="34"><div><p>Uczeń: <strong data-demo-student>Maja</strong></p></div></div>
+      </div>
+      <div class="exam-clock" id="demo-clock" hidden><span>Pozostało</span><strong id="demo-time" role="timer">30:00</strong></div>
+      <div id="demo-exam-pages">
+        <section class="exam-page" id="demo-lecture-preview" hidden>
+          <h3>Materiał do egzaminu</h3>
+          <p>Zapoznaj się z poniższym materiałem przed rozwiązaniem zadań.</p>
+          <hr><p id="demo-lecture-copy"></p>
+        </section>
+        <section class="exam-page task-section">
+          <div class="task-context" tabindex="0" role="region" aria-labelledby="demo-task-title">
+            <h3>Zadanie 1</h3>
+            <h4 id="demo-task-title">Idempotentność metod HTTP</h4>
+            <p>Co oznacza idempotentność w HTTP? Porównaj metody PUT i POST oraz podaj przykład ponowionego żądania.</p>
+            <div class="task-result-output" aria-live="polite" id="demo-task-result" hidden>
+              <h3>Wynik oceny zadania</h3>
+              <p><strong>Uzyskany wynik:</strong> <span id="demo-model-score"></span></p>
+              <p id="demo-vibe-verdict" hidden><strong>Czy wykryto Vibe Coding?</strong> <span id="demo-vibe-value"></span></p>
+              <p><strong>Feedback od AI:</strong> <span id="demo-feedback"></span></p>
+              <p id="demo-vibe-feedback" hidden><strong>Powód oznaczenia przez AI:</strong> <span id="demo-vibe-reason"></span></p>
+            </div>
+          </div>
+          <form id="demo-answer-form" class="task-form">
+            <fieldset>
+              <legend>Twoje rozwiązanie</legend>
+              <p class="task-answer-label">
+                <label for="demo-answer">Odpowiedź ucznia <small class="demo-option-status">Tylko przykłady w demo</small></label>
+                <span class="task-answer-count" id="demo-answer-count">0 / 300 słów</span>
+              </p>
+              <p><textarea id="demo-answer" class="aurora-field task-solution-input" rows="10" aria-describedby="demo-answer-count" placeholder="W trybie demo wybierz jedną z przykładowych odpowiedzi poniżej…" readonly></textarea></p>
+              <p class="draft-status" id="demo-draft-status" role="status" hidden></p>
+              <button class="btn submit-task-button" id="demo-send" type="submit" disabled>Zatwierdź i wyślij zadanie</button>
+              <div class="demo-extra-actions" id="demo-answer-actions">
+                <button class="btn btn-secondary" id="demo-use-example" type="button">Wstaw poprawny przykład</button>
+                <button class="btn btn-secondary" id="demo-use-flagged-example" type="button">Wstaw przykład do weryfikacji</button>
+                <button class="btn btn-secondary" id="demo-expire" type="button" hidden>Symuluj upływ czasu</button>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+        <section class="exam-page" id="demo-finish-page" hidden>
+          <h3>Zakończenie egzaminu</h3>
+          <p>Możesz zakończyć egzamin po przesłaniu i ocenieniu przynajmniej jednego zadania. Nieprzesłane zadania otrzymają 0%.</p>
+          <p><strong id="demo-submitted-counter"></strong></p>
+          <hr>
+          <button class="btn" type="button" id="demo-finish">Zatwierdź i zakończ egzamin</button>
+          <p class="exam-notice" id="demo-grade-status" role="status" hidden></p>
+        </section>
+      </div>
+      <nav aria-label="Nawigacja egzaminu">
+        <p class="exam-location"><span>Aktualna sekcja: </span><strong id="demo-page-indicator" aria-live="polite">Zadanie 1 z 1</strong></p>
+        <button class="btn btn-secondary" id="demo-exam-previous" type="button" disabled>← Poprzednie</button>
+        <button class="btn" id="demo-exam-next" type="button">Następne →</button>
+      </nav>
+    </div>
+  </section>
+  <section class="demo-panel demo-portal" data-demo-panel="3" aria-label="Ocena odpowiedzi" hidden></section>
+
+  <section class="demo-panel" data-demo-panel="4" aria-labelledby="demo-results-title" hidden>
+    <section class="results-panel">
+      <div class="section-toolbar"><h3 id="demo-results-title" tabindex="-1">Uczniowie i wyniki</h3><button class="btn btn-secondary btn-sm" id="demo-refresh-results" type="button">↻ Odśwież wyniki</button></div>
+      <p class="result-summary" id="results-metrics"></p>
+      <form class="results-filter" id="demo-results-filter">
+        <label for="demo-task-filter">Pokaż odpowiedzi</label>
+        <select class="filter-select" id="demo-task-filter"><option value="">Wszystkie zadania</option><option value="1">1. Idempotentność metod HTTP</option></select>
+        <button class="btn btn-secondary btn-sm" type="submit">Pokaż</button>
+      </form>
+      <div class="results-layout">
+        <div class="results-roster"><div class="results-students" aria-label="Lista uczniów">
+          <div class="student-result selected">
+            <img class="student-avatar" data-demo-avatar alt="" width="36" height="36">
+            <div class="student-result-info"><div class="student-result-head"><strong data-demo-student>Maja</strong><span class="student-warning" id="demo-student-warning" role="img" aria-label="AI oznaczyło co najmniej jedną odpowiedź do weryfikacji" title="Odpowiedź wymaga weryfikacji" hidden><span aria-hidden="true">!</span></span></div><small id="demo-roster-score"></small></div>
+          </div>
+        </div></div>
+        <div class="results-detail" aria-label="Wyniki ucznia">
+          <h3><img class="student-avatar" data-demo-avatar alt="" width="36" height="36"><span data-demo-student>Maja</span></h3>
+          <p class="result-summary">Wynik końcowy: <output id="demo-result-score" for="demo-review-score">75%</output></p>
+          <p class="result-summary" id="demo-only-ai-note" hidden>Tryb Tylko AI — ręczna zmiana ocen jest wyłączona.</p>
+          <details class="result-task" id="demo-result-task">
+            <summary>1. Idempotentność metod HTTP · <span id="demo-result-task-score"></span></summary>
+            <p class="result-summary" id="demo-no-answer" hidden>Uczeń nie przesłał odpowiedzi. Po zakończeniu egzaminu zadanie jest liczone jako 0%.</p>
+            <p class="tag teal" id="demo-reviewed" hidden>Ocena zweryfikowana przez prowadzącego</p>
+            <p class="tag amber" id="demo-host-vibe-warning" hidden>AI oznaczyło odpowiedź do dodatkowej weryfikacji.</p>
+            <h4 id="demo-host-vibe-heading" hidden>Powód oznaczenia przez AI</h4>
+            <p class="result-summary" id="demo-host-vibe-reason" hidden></p>
+            <h4 data-demo-submission>Odpowiedź ucznia</h4><pre id="demo-result-answer" data-demo-submission></pre>
+            <h4 data-demo-submission>Komentarz AI</h4><p class="result-summary" id="demo-host-feedback" data-demo-submission></p>
+            <form id="demo-review-form" class="grade-form">
+              <label>Ocena (%) <input class="aurora-field" id="demo-review-score" name="scorePercentage" type="number" min="0" max="100" step="1" required aria-label="Ocena: Idempotentność metod HTTP"></label>
+              <button class="btn btn-sm" type="submit">Zapisz ocenę</button>
+            </form>
+          </details>
+          <p class="result-summary" id="demo-review-status" role="status"></p>
+        </div>
+      </div>
+    </section>
+  </section>
+  <p class="demo-sr" id="demo-step-status" role="status" aria-atomic="true"></p>
+</div>
+    </section>
+
+    <section class="slide" data-slide="architektura" data-title="Architektura" aria-labelledby="title-architecture" hidden>
+      <header class="slide-heading">
+        <h2 id="title-architecture" tabindex="-1">Architektura</h2>
+        <p class="description">Spring Boot pilnuje terminu oddania egzaminu. Szkice i wyniki trafiają do PostgreSQL, a odpowiedzi ocenia lokalna Ollama.</p>
+      </header>
+      <div class="architecture" id="architecture" data-path="ai">
+        <section class="arch-node arch-client" aria-label="Przeglądarka">
+          <span class="caption">Frontend</span><h3>Przeglądarka</h3><p>Panel prowadzącego<span class="arch-sep" aria-hidden="true"> · </span><br>Widok ucznia</p>
+        </section>
+        <span class="arch-connector" aria-hidden="true"></span>
+        <section class="arch-node arch-server" aria-label="Spring Boot">
+          <span class="caption">Backend</span><h3>Spring Boot</h3><p>Spring MVC<span class="arch-sep" aria-hidden="true"> · </span><br>Szablony Thymeleaf</p>
+        </section>
+        <span class="arch-connector branch" aria-hidden="true"></span>
+        <div class="arch-services">
+          <section class="arch-node arch-ai"><span class="caption">Ocena odpowiedzi</span><h3>Spring AI + Ollama</h3><p>qwen3.5:9b · Multiagent: deepseek-r1:14b i llama3.1:8b</p></section>
+          <section class="arch-node arch-db"><span class="caption">Zapis danych</span><h3>PostgreSQL</h3><p>Konta, plany, testy, podejścia, szkice i wyniki</p></section>
+          <section class="arch-node arch-redis"><span class="caption">Sesje i integracja</span><h3>Redis</h3><p>Kody OTP, sesje JWT oraz opcjonalny import szkiców z DocsHelpera</p></section>
+        </div>
+      </div>
+      <div class="architecture-detail">
+        <div class="architecture-controls" role="group" aria-label="Etap przetwarzania">
+          <button class="btn btn-secondary" type="button" data-path="ai" aria-pressed="true">Ocena AI</button>
+          <button class="btn btn-secondary" type="button" data-path="db" aria-pressed="false">Szkice i limit czasu</button>
+          <button class="btn btn-secondary" type="button" data-path="bridge" aria-pressed="false">Sesje i Redis</button>
+        </div>
+        <p id="architecture-explanation" aria-live="polite">Spring AI przesyła odpowiedź i kryteria do lokalnej Ollamy. W trybie Multiagent trzy modele kolejno oceniają tę samą odpowiedź według tych samych kryteriów. Wynik i komentarz pochodzą od modelu ze środkową oceną. Do oznaczenia odpowiedzi do weryfikacji potrzeba dwóch głosów.</p>
+      </div>
+    </section>
+
+    <section class="slide ending" data-slide="projekt" data-title="Projekt" aria-labelledby="title-project" hidden>
+      <div class="ending-copy">
+        <h2 id="title-project" tabindex="-1">Learn<span>Auditor</span></h2>
+        <p class="description">Aplikacja egzaminacyjna oparta na Javie 21, Spring Boot, PostgreSQL i Redis.</p>
+        <p class="description">Prowadzący loguje się kodem z e-maila, zarządza własnymi testami i przegląda statystyki, odpowiedzi oraz raporty końcowe uczniów. Opcjonalnie może też importować szkice egzaminów z osobnego serwisu DocsHelper.</p>
+        <p class="description">Standard pozwala utworzyć 5 testów tygodniowo, Plus 15, a Premium daje dostęp bez limitu. Limit odnawia się w poniedziałek o 00:00 czasu polskiego.</p>
+        <div class="cover-actions">
+          <button class="btn" type="button" data-goto="demo">Wróć do demo <span aria-hidden="true">↗</span></button>
+          <button class="btn btn-secondary" type="button" data-goto="start">Od początku</button>
+        </div>
+      </div>
+      <div class="ending-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" focusable="false"><path d="M12 1.5 14.9 9.1 22.5 12 14.9 14.9 12 22.5 9.1 14.9 1.5 12 9.1 9.1Z"/></svg></div>
+    </section>
+  </main>
+
+  <footer class="deck-footer" aria-label="Nawigacja prezentacji">
+    <div class="deck-position"><span class="deck-counter" id="slide-counter">01 / 06</span><span class="deck-chapter" id="slide-name">Start</span></div>
+    <nav class="deck-progress" id="slide-progress" aria-label="Wybór slajdu"></nav>
+    <div class="deck-arrows"><button class="icon-btn" type="button" id="slide-back" aria-label="Poprzedni slajd" title="Strzałka w lewo">←</button><button class="btn next" type="button" id="slide-next" title="Strzałka w prawo">Dalej <span aria-hidden="true">→</span></button></div>
+  </footer>
+
+  <dialog id="contents" aria-labelledby="contents-title">
+    <div class="contents-head"><h2 id="contents-title">Spis slajdów</h2><button class="icon-btn" type="button" id="close-contents" aria-label="Zamknij spis slajdów" autofocus>×</button></div>
+    <nav id="contents-list" aria-label="Slajdy prezentacji"></nav>
+    <p class="contents-keys">Strzałki ← → zmieniają slajdy, a F włącza pełny ekran.</p>
+  </dialog>
+  <p id="deck-status" class="visually-hidden" role="status"></p>
+
+  <script>
+(() => {
+  'use strict';
+
+  const slides = Array.from(document.querySelectorAll('[data-slide]'));
+  const stage = document.getElementById('stage');
+  const counter = document.getElementById('slide-counter');
+  const chapter = document.getElementById('slide-name');
+  const progress = document.getElementById('slide-progress');
+  const previous = document.getElementById('slide-back');
+  const next = document.getElementById('slide-next');
+  const contents = document.getElementById('contents');
+  const contentsList = document.getElementById('contents-list');
+  const fullscreen = document.getElementById('fullscreen');
+  const status = document.getElementById('deck-status');
+  let active = 0;
+
+  const number = index => String(index + 1).padStart(2, '0');
+  const indexFor = key => slides.findIndex(slide => slide.dataset.slide === key);
+
+  const progressButtons = slides.map((slide, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.goto = slide.dataset.slide;
+    button.title = slide.dataset.title;
+    button.setAttribute('aria-label', `Slajd ${index + 1}. ${slide.dataset.title}`);
+    progress.append(button);
+    return button;
+  });
+
+  const contentsButtons = slides.map((slide, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'nav-link';
+    button.dataset.goto = slide.dataset.slide;
+    const label = document.createElement('span');
+    label.className = 'contents-number';
+    label.textContent = number(index);
+    button.append(label, document.createTextNode(slide.dataset.title));
+    contentsList.append(button);
+    return button;
+  });
+
+  function show(index, focusHeading = true, syncHash = true) {
+    if (index < 0 || index >= slides.length) return;
+    active = index;
+    slides.forEach((slide, position) => {
+      slide.hidden = position !== active;
+      slide.classList.toggle('is-active', position === active);
+      progressButtons[position].classList.toggle('visited', position < active);
+      for (const button of [progressButtons[position], contentsButtons[position]]) {
+        if (position === active) button.setAttribute('aria-current', 'step');
+        else button.removeAttribute('aria-current');
+      }
+    });
+    const slide = slides[active];
+    counter.textContent = `${number(active)} / ${String(slides.length).padStart(2, '0')}`;
+    chapter.textContent = slide.dataset.title;
+    previous.disabled = active === 0;
+    next.disabled = active === slides.length - 1;
+    stage.scrollTop = 0;
+    if (syncHash) {
+      try { history.replaceState(null, '', '#' + slide.dataset.slide); }
+      catch { window.location.hash = slide.dataset.slide; }
+    }
+    if (focusHeading) slide.querySelector('h1, h2').focus({ preventScroll: true });
+  }
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('button[data-goto]');
+    if (!button) return;
+    if (contents.open) contents.close();
+    show(indexFor(button.dataset.goto));
+  });
+  previous.addEventListener('click', () => show(active - 1));
+  next.addEventListener('click', () => show(active + 1));
+  document.getElementById('open-contents').addEventListener('click', () => contents.showModal());
+  document.getElementById('close-contents').addEventListener('click', () => contents.close());
+  contents.addEventListener('click', event => { if (event.target === contents) contents.close(); });
+
+  async function toggleFullscreen() {
+    if (!document.fullscreenEnabled) return;
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();
+    } catch {
+      status.textContent = 'Otwórz prezentację w osobnym oknie przeglądarki, aby użyć pełnego ekranu.';
+    }
+  }
+  fullscreen.hidden = !document.fullscreenEnabled;
+  fullscreen.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', () => {
+    fullscreen.textContent = document.fullscreenElement ? 'Zakończ pełny ekran' : 'Pełny ekran';
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.defaultPrevented || contents.open || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+    let target;
+    if (event.key === 'ArrowLeft') target = active - 1;
+    if (event.key === 'ArrowRight') target = active + 1;
+    if (event.key === 'Home') target = 0;
+    if (event.key === 'End') target = slides.length - 1;
+    if (event.key === ' ' && !event.target.closest('button, a')) target = active + 1;
+    if (event.key.toLowerCase() === 'f') toggleFullscreen();
+    if (target === undefined) return;
+    event.preventDefault();
+    show(target);
+  });
+
+  const architecture = document.getElementById('architecture');
+  const explanation = document.getElementById('architecture-explanation');
+  const pathButtons = Array.from(document.querySelectorAll('.architecture-controls [data-path]'));
+  const paths = {
+    ai: 'Spring AI przesyła odpowiedź i kryteria do lokalnej Ollamy. W trybie Multiagent trzy modele kolejno oceniają tę samą odpowiedź według tych samych kryteriów. Wynik i komentarz pochodzą od modelu ze środkową oceną. Do oznaczenia odpowiedzi do weryfikacji potrzeba dwóch głosów.',
+    db: 'Spring Boot zapisuje szkice w PostgreSQL. Po upływie czasu blokuje dalsze odpowiedzi i oddaje zapisane szkice, także gdy uczeń zamknął kartę.',
+    bridge: 'Redis przechowuje kody OTP weryfikowane skryptem Lua oraz aktywne sesje JWT. Opcjonalnie przyjmuje też jednorazowe szkice testów z osobnego serwisu DocsHelper — LearnAuditor działa jednak w pełni samodzielnie bez niego.'
+  };
+  pathButtons.forEach(button => button.addEventListener('click', () => {
+    const path = button.dataset.path;
+    architecture.dataset.path = path;
+    explanation.textContent = paths[path];
+    pathButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  }));
+
+  function showHash(focusHeading) {
+    const requested = indexFor(location.hash.slice(1));
+    show(Math.max(0, requested), focusHeading, false);
+  }
+  window.addEventListener('hashchange', () => showHash(true));
+  showHash(false);
+})();
+(() => {
+  const demo = document.getElementById('la-demo');
+  if (!demo) return;
+  const demoAvatar = 'data:image/png;base64,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';
+  demo.querySelectorAll('[data-demo-avatar]').forEach(img => { img.src = demoAvatar; });
+
+  const find = selector => demo.querySelector(selector);
+  const panels = [...demo.querySelectorAll('[data-demo-panel]')];
+  const steps = [...demo.querySelectorAll('[data-demo-step]')];
+  const forms = [...demo.querySelectorAll('form')];
+  const setupForm = find('#demo-setup-form');
+  const joinForm = find('#demo-join-form');
+  const codeForm = find('#demo-code-form');
+  const examView = find('#demo-exam-view');
+  const lecturePage = find('#demo-lecture-preview');
+  const taskPage = find('.task-section');
+  const finishPage = find('#demo-finish-page');
+  const previous = find('#demo-exam-previous');
+  const next = find('#demo-exam-next');
+  const resultTask = find('#demo-result-task');
+  const examTitle = find('#demo-exam-title');
+  const joiningOpen = find('#demo-join-open');
+  const timed = find('#demo-timed');
+  const requirePassword = find('#demo-require-password');
+  const password = find('#demo-password');
+  const joinPassword = find('#demo-join-password');
+  const multiagent = find('#demo-multiagent');
+  const onlyAI = find('#demo-only-ai');
+  const minutes = find('#demo-minutes');
+  const joinCode = find('#demo-code');
+  const studentName = find('#demo-name');
+  const answer = find('#demo-answer');
+  const clock = find('#demo-clock');
+  const countdown = find('#demo-time');
+  const draftStatus = find('#demo-draft-status');
+  const useExample = find('#demo-use-example');
+  const useFlaggedExample = find('#demo-use-flagged-example');
+  const send = find('#demo-send');
+  const expire = find('#demo-expire');
+  const answerActions = find('#demo-answer-actions');
+  const taskContext = taskPage.querySelector('.task-context');
+  const taskResult = find('#demo-task-result');
+  const reviewScore = find('#demo-review-score');
+  const reviewStatus = find('#demo-review-status');
+  const replay = find('#demo-replay');
+  const importDocshelper = find('#demo-import-docshelper');
+  const docshelperLecture = 'Wprowadzenie z notatek (DocsHelper): Metoda HTTP jest idempotentna, gdy wielokrotne wysłanie identycznego żądania daje ten sam stan zasobu na serwerze co pojedyncze wywołanie (np. GET, PUT, DELETE). Metoda POST nie jest idempotentna — ponowienie żądania może utworzyć kolejny zasób lub powtórzyć operację.';
+  const sampleAnswer = 'Idempotentność oznacza, że ponowienie identycznego żądania ma ten sam zamierzony skutek co pojedyncze żądanie. PUT jest idempotentny, a POST nie ma takiej gwarancji. Na przykład dwa identyczne żądania PUT ustawiające adres użytkownika pozostawiają ten sam adres co jedno żądanie.';
+  const flaggedExample = sampleAnswer + ' Jako asystent AI mogę też przygotować wersję w tabeli.';
+  const exampleButtons = [[useExample, sampleAnswer], [useFlaggedExample, flaggedExample]];
+  const verificationNotice = 'Uwaga: odpowiedź została oznaczona do dodatkowej weryfikacji pod kątem użycia AI. Tymczasowy wynik wynosi 0%. Ostateczną ocenę wystawi HOST.';
+  let lastUnlocked = 0;
+  let deadline = null;
+  let ticker;
+  let draft = '';
+  let finished = false;
+  let hasLecture = false;
+  let examPage = 'task';
+
+  function showExamPage(page) {
+    examPage = page;
+    lecturePage.hidden = page !== 'lecture';
+    taskPage.hidden = page !== 'task';
+    finishPage.hidden = page !== 'finish';
+    previous.disabled = page === (hasLecture ? 'lecture' : 'task');
+    next.disabled = page === 'finish';
+    find('#demo-finish').disabled = !finished;
+    find('#demo-page-indicator').textContent = {
+      lecture: 'Materiał do egzaminu', task: 'Zadanie 1 z 1', finish: 'Zakończenie egzaminu'
+    }[page];
+  }
+
+  function showCheckin(visible, focus = true) {
+    find('#demo-join-card').hidden = visible;
+    find('#demo-checkin-card').hidden = !visible;
+    if (focus) find(visible ? '#demo-checkin-card h2' : '#demo-join-card h2').focus({ preventScroll: true });
+  }
+
+  function updateResultScore(score) {
+    find('#demo-result-score').textContent = `${score}%`;
+    find('#demo-roster-score').textContent = `Zakończony · ${score}%`;
+    find('#results-metrics').textContent = `Uczniowie: 1 · Zakończone: 1 · W trakcie: 0 · Średni wynik zakończonych: ${score}%`;
+  }
+
+  function showStep(index) {
+    if (index === 2 || index === 3) {
+      panels[index].append(examView);
+      if (index === 2 || finished) showExamPage('task');
+    }
+    panels.forEach((panel, position) => { panel.hidden = position !== index; });
+    panels[index].scrollTop = 0;
+    document.getElementById('stage').scrollTop = 0;
+    replay.hidden = lastUnlocked === 0;
+    steps.forEach((step, position) => {
+      step.disabled = position > lastUnlocked;
+      if (position === index) step.setAttribute('aria-current', 'step');
+      else step.removeAttribute('aria-current');
+    });
+    find('#demo-step-status').textContent = `Etap ${index + 1} z ${steps.length}.`;
+    const heading = index === 0 && setupForm.hidden ? find('#demo-open-setup')
+      : panels[index].querySelector('section:not([hidden]) > h2, h2[tabindex], h3[tabindex]');
+    const visibleHeading = index === 1 ? find('[data-demo-panel="1"] > section:not([hidden]) h2') : heading;
+    visibleHeading?.focus({ preventScroll: true });
+  }
+
+  function advance(index) {
+    lastUnlocked = index;
+    showStep(index);
+  }
+
+  function validateText(field, message) {
+    field.value = field.value.trim();
+    if (field.value) return true;
+    field.setCustomValidity(message);
+    field.reportValidity();
+    return false;
+  }
+
+  [examTitle, joinCode, studentName, joinPassword, answer].forEach(field => {
+    field.addEventListener('input', () => field.setCustomValidity(''));
+  });
+
+  steps.forEach((step, index) => {
+    step.addEventListener('click', () => {
+      if (index <= lastUnlocked) showStep(index);
+    });
+  });
+
+  function syncMinutes() {
+    find('#demo-minutes-field').hidden = !timed.checked;
+    minutes.disabled = !timed.checked;
+    minutes.required = timed.checked;
+  }
+
+  function syncPassword() {
+    find('#demo-password-field').hidden = !requirePassword.checked;
+    password.disabled = !requirePassword.checked;
+    password.required = requirePassword.checked;
+  }
+
+  function setSetupOpen(open) {
+    setupForm.hidden = !open;
+    find('#demo-open-setup').hidden = open;
+    (open ? find('#demo-setup-title') : find('#demo-open-setup')).focus({ preventScroll: true });
+  }
+
+  timed.addEventListener('change', syncMinutes);
+  requirePassword.addEventListener('change', syncPassword);
+  find('#demo-open-setup').addEventListener('click', () => setSetupOpen(true));
+  importDocshelper.addEventListener('click', () => {
+    examTitle.value = 'HTTP i REST — Idempotentność';
+    examTitle.setCustomValidity('');
+    find('#demo-lecture').value = docshelperLecture;
+    importDocshelper.textContent = '✓ Wczytano szkic';
+  });
+  ['#demo-cancel-setup', '#demo-close-setup'].forEach(selector => {
+    find(selector).addEventListener('click', () => {
+      setupForm.reset();
+      importDocshelper.textContent = '✦ Wczytaj szkic';
+      examTitle.setCustomValidity('');
+      syncMinutes();
+      syncPassword();
+      setSetupOpen(false);
+    });
+  });
+  find('#demo-back-setup').addEventListener('click', event => {
+    event.preventDefault();
+    showStep(0);
+  });
+  find('#demo-back-code').addEventListener('click', event => {
+    event.preventDefault();
+    showCheckin(false);
+  });
+
+  setupForm.addEventListener('submit', event => {
+    event.preventDefault();
+    if (lastUnlocked >= 2) return;
+    if (!validateText(examTitle, 'Wpisz nazwę egzaminu.')) return;
+    demo.querySelectorAll('[data-demo-exam]').forEach(title => { title.textContent = examTitle.value; });
+    joinForm.hidden = !joiningOpen.checked;
+    find('#demo-join-closed').hidden = joiningOpen.checked;
+    find('#demo-checkin-title').hidden = !joiningOpen.checked;
+    find('#demo-join-password-field').hidden = !requirePassword.checked;
+    joinPassword.disabled = !requirePassword.checked;
+    joinPassword.required = requirePassword.checked;
+    joinPassword.value = '';
+    joinPassword.setCustomValidity('');
+    const lecture = find('#demo-lecture').value.trim();
+    hasLecture = Boolean(lecture);
+    find('#demo-lecture-copy').textContent = lecture;
+    const joinTime = find('#demo-join-time');
+    joinTime.hidden = !timed.checked || !joiningOpen.checked;
+    joinTime.textContent = `Masz ${minutes.valueAsNumber} min od rozpoczęcia. Po upływie czasu egzamin odda zapisane szkice.`;
+    showCheckin(false, false);
+    advance(1);
+  });
+
+  codeForm.addEventListener('submit', event => {
+    event.preventDefault();
+    joinCode.value = joinCode.value.trim().toUpperCase();
+    if (joinCode.value !== 'HTTP01') {
+      joinCode.setCustomValidity('Kod przykładowego egzaminu to HTTP01.');
+      joinCode.reportValidity();
+      return;
+    }
+    showCheckin(true);
+  });
+
+  joinForm.addEventListener('submit', event => {
+    event.preventDefault();
+    if (lastUnlocked >= 2 || !joiningOpen.checked || joinForm.hidden) return;
+    if (!validateText(studentName, 'Wpisz nick ucznia.')) return;
+    if (requirePassword.checked && joinPassword.value !== password.value) {
+      joinPassword.setCustomValidity('Niepoprawne hasło do testu.');
+      joinPassword.reportValidity();
+      return;
+    }
+    demo.querySelectorAll('[data-demo-student]').forEach(name => { name.textContent = studentName.value; });
+    deadline = timed.checked ? Date.now() + minutes.valueAsNumber * 60_000 : null;
+    clock.hidden = deadline === null;
+    expire.hidden = deadline === null;
+    draftStatus.hidden = false;
+    draftStatus.textContent = 'Wybierz jedną z przykładowych odpowiedzi poniżej.';
+    [...setupForm.elements, ...joinForm.elements].forEach(control => { control.disabled = true; });
+    advance(2);
+    if (hasLecture) showExamPage('lecture');
+    if (deadline !== null) {
+      tick();
+      ticker = setInterval(tick, 250);
+    }
+  });
+
+  const answerMaxWords = 300;
+  const countWords = text => text.match(/[\p{L}\p{N}][\p{L}\p{N}\p{M}]*(?:[-‐‑'’][\p{L}\p{N}][\p{L}\p{N}\p{M}]*)*/gu)?.length ?? 0;
+
+  function updateAnswerCount() {
+    const wordCount = countWords(answer.value);
+    const counter = find('#demo-answer-count');
+    counter.textContent = `${wordCount} / ${answerMaxWords} słów`;
+    counter.classList.toggle('is-over-limit', wordCount > answerMaxWords);
+    return wordCount;
+  }
+
+  function updateDraft() {
+    updateAnswerCount();
+    draft = answer.value.trim();
+    draftStatus.textContent = draft ? 'Szkic zapisany.' : 'Wybierz jedną z przykładowych odpowiedzi poniżej.';
+  }
+
+  answer.addEventListener('click', () => {
+    if (!finished && !answer.value) useExample.focus();
+  });
+  exampleButtons.forEach(([button, example]) => button.addEventListener('click', () => {
+    if (finished) return;
+    answer.value = example;
+    send.disabled = false;
+    updateDraft();
+  }));
+
+  function tick() {
+    const seconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    const text = [Math.floor(seconds / 60), seconds % 60].map(value => String(value).padStart(2, '0')).join(':');
+    if (countdown.textContent !== text) countdown.textContent = text;
+    clock.classList.toggle('is-ending', seconds <= 60);
+    if (seconds === 0) finish(true, draft);
+  }
+
+  function finish(automatic, solution) {
+    if (finished) return;
+    finished = true;
+    clearInterval(ticker);
+    answer.readOnly = true;
+    send.disabled = true;
+    answerActions.hidden = true;
+    if (automatic) {
+      countdown.textContent = '00:00';
+      clock.classList.add('is-ending');
+    }
+    const isExample = solution === sampleAnswer || solution === flaggedExample;
+    const usesMultiagentGrading = multiagent.checked && Boolean(solution);
+    const flagged = !onlyAI.checked && solution === flaggedExample;
+    const primary = isExample
+      ? {score: 100, feedback: 'Poprawnie porównujesz PUT i POST. Przykład pokazuje ten sam skutek ponowienia żądania.'}
+      : {score: solution ? 75 : 0, feedback: solution
+        ? 'To przykładowy wynik. W aplikacji komentarz dotyczy treści oddanej odpowiedzi.'
+        : 'Zadanie bez odpowiedzi otrzymuje 0%.'};
+    const additional = isExample
+      ? [{score: 96, feedback: 'Podajesz przykład ponowionego PUT. Doprecyzuj definicję idempotentności.'},
+         {score: 98, feedback: 'Trafnie podajesz przykład PUT. Możesz doprecyzować, czemu POST nie daje tej samej gwarancji.'}]
+      : [{...primary, score: 79}, {...primary, score: 77}];
+    const evaluation = usesMultiagentGrading ? [primary, ...additional].sort((a, b) => a.score - b.score)[1] : primary;
+    const score = flagged ? 0 : evaluation.score;
+    const feedback = flagged ? evaluation.feedback + '\n\n' + verificationNotice : evaluation.feedback;
+    const reason = flagged ? [
+      'Dopisałeś „Jako asystent AI mogę też przygotować wersję w tabeli”, co przypomina dopisek asystenta.',
+      ...(usesMultiagentGrading ? ['Zaproponowałeś przygotowanie tabeli poza treścią zadania, co sugeruje wklejenie fragmentu rozmowy.'] : [])
+    ].join('\n') : '';
+
+    find('#demo-vibe-verdict').hidden = onlyAI.checked || !solution;
+    find('#demo-vibe-value').textContent = flagged ? 'Tak' : 'Nie';
+    find('#demo-vibe-reason').textContent = reason;
+    find('#demo-host-vibe-reason').textContent = reason;
+    ['#demo-vibe-feedback', '#demo-student-warning', '#demo-host-vibe-warning', '#demo-host-vibe-heading', '#demo-host-vibe-reason']
+      .forEach(selector => { find(selector).hidden = !flagged; });
+
+    clock.hidden = true;
+    draftStatus.hidden = true;
+    send.textContent = solution ? 'Zadanie wysłane' : 'Czas minął';
+    taskResult.hidden = false;
+    find('#demo-model-score').textContent = `${score}%`;
+    find('#demo-feedback').textContent = feedback;
+    find('#demo-grade-status').hidden = !automatic;
+    find('#demo-grade-status').textContent = solution
+      ? 'Czas minął. Szkic został oddany automatycznie.'
+      : 'Czas minął. Egzamin zakończono bez odpowiedzi.';
+    find('#demo-submitted-counter').textContent = `Przesłane zadania: ${solution ? 1 : 0} / 1`;
+    find('#demo-result-answer').textContent = solution;
+    find('#demo-host-feedback').textContent = feedback;
+    find('#demo-no-answer').hidden = Boolean(solution);
+    resultTask.querySelectorAll('[data-demo-submission]').forEach(element => { element.hidden = !solution; });
+    reviewScore.value = score;
+    find('#demo-result-task-score').textContent = solution ? `${score}%` : 'Brak odpowiedzi';
+    updateResultScore(score);
+    find('#demo-review-form').hidden = !solution || onlyAI.checked;
+    find('#demo-only-ai-note').hidden = !onlyAI.checked;
+    advance(3);
+    if (automatic) {
+      showExamPage('finish');
+    } else if (taskContext.scrollHeight > taskContext.clientHeight) {
+      taskContext.scrollTop += taskResult.getBoundingClientRect().top - taskContext.getBoundingClientRect().top;
+    }
+  }
+
+  expire.addEventListener('click', () => finish(true, draft));
+  find('#demo-answer-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (finished) return;
+    if (deadline !== null && Date.now() >= deadline) {
+      tick();
+      return;
+    }
+    const solution = answer.value.trim();
+    if (solution !== sampleAnswer && solution !== flaggedExample) {
+      draftStatus.hidden = false;
+      draftStatus.textContent = 'Wybierz jedną z przykładowych odpowiedzi poniżej.';
+      useExample.focus();
+      return;
+    }
+    finish(false, solution);
+  });
+
+  previous.addEventListener('click', () => showExamPage(examPage === 'finish' ? 'task' : 'lecture'));
+  next.addEventListener('click', () => showExamPage(examPage === 'lecture' ? 'task' : 'finish'));
+  find('#demo-finish').addEventListener('click', () => {
+    if (finished) advance(4);
+  });
+  find('#demo-results-filter').addEventListener('submit', event => {
+    event.preventDefault();
+    resultTask.open = Boolean(find('#demo-task-filter').value);
+  });
+  find('#demo-refresh-results').addEventListener('click', () => {
+    reviewStatus.textContent = 'Wyniki są aktualne.';
+  });
+
+  find('#demo-review-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (onlyAI.checked) return;
+    updateResultScore(reviewScore.valueAsNumber);
+    find('#demo-result-task-score').textContent = `${reviewScore.valueAsNumber}%`;
+    find('#demo-reviewed').hidden = false;
+    reviewStatus.textContent = 'Zapisano ocenę prowadzącego.';
+  });
+
+  replay.addEventListener('click', () => {
+    clearInterval(ticker);
+    deadline = null;
+    draft = '';
+    finished = false;
+    forms.forEach(form => form.reset());
+    importDocshelper.textContent = '✦ Wczytaj szkic';
+    updateAnswerCount();
+    [...setupForm.elements, ...joinForm.elements].forEach(control => { control.disabled = control === find('#demo-programming'); });
+    [examTitle, joinCode, studentName, joinPassword, answer].forEach(field => field.setCustomValidity(''));
+    answer.readOnly = true;
+    send.disabled = true;
+    answerActions.hidden = false;
+    taskContext.scrollTop = 0;
+    clock.hidden = true;
+    clock.classList.remove('is-ending');
+    countdown.textContent = '30:00';
+    expire.hidden = true;
+    draftStatus.textContent = '';
+    draftStatus.hidden = true;
+    syncMinutes();
+    syncPassword();
+    setSetupOpen(true);
+    demo.querySelectorAll('[data-demo-exam]').forEach(title => { title.textContent = examTitle.value; });
+    send.textContent = 'Zatwierdź i wyślij zadanie';
+    taskResult.hidden = true;
+    find('#demo-reviewed').hidden = true;
+    resultTask.open = false;
+    showCheckin(false, false);
+    reviewStatus.textContent = '';
+    advance(0);
+  });
+  syncMinutes();
+  syncPassword();
+})();
+  </script>
+</body>
+</html>
